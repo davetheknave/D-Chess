@@ -1,0 +1,26 @@
+[gd_scene load_steps=5 format=2]
+
+[ext_resource path="res://Pieces/Piece.tscn" type="PackedScene" id=1]
+[ext_resource path="res://models/bQueen.scn" type="PackedScene" id=2]
+[ext_resource path="res://Pieces/white.tres" type="Material" id=3]
+
+[sub_resource type="BoxShape" id=1]
+
+extents = Vector3( 0.231147, 0.487898, 0.204734 )
+
+[node name="Queen" instance=ExtResource( 1 )]
+
+shape = NodePath("bQueen")
+
+[node name="CollisionShape" parent="Area" index="0"]
+
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0.19776, 0.455817, 0.21836 )
+shape = SubResource( 1 )
+
+[node name="bQueen" parent="." index="1" instance=ExtResource( 2 )]
+
+transform = Transform( 0.1, 0, 0, 0, 0.1, 0, 0, 0, 0.1, -7.79446, -0.436171, 0.451699 )
+material/0 = ExtResource( 3 )
+_sections_unfolded = [ "material" ]
+
+
