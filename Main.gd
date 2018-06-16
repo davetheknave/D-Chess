@@ -8,7 +8,7 @@ var pos
 var piece
 
 func _ready():
-	model = preload("res://BoardModel.gd").new($WhitePieces, $BlackPieces)
+	model = preload("res://BoardModel.gd").new($WhitePieces, $BlackPieces, $Board)
 	data = preload("res://BoardData.gd").new()
 	pos = data.reset_game()
 	for i in $WhitePieces.get_children():
@@ -22,26 +22,19 @@ func update():
 	model.update_pieces(pos)
 
 func move(startX, startY, endX, endY):
-	startY = 8 - startY
-	endY = 8 - endY
-	startX = startX - 1
-	endX = endX - 1
+	endX -= 1
+	endY -= 1
 	var valid = data.is_valid_move(startX, startY, endX, endY)
 	if not valid:
 		return
-	pos = data.move(startX, startY, endX, endY)
+	pos = data.move(startX, 7-startY, endX, 7-endY)
 	update()
 	$HUD.turn(data.whiteNext)
 
-#func _input(event):
-##	if event is InputEventMouseButton:
-##		if not event.pressed:
-##			piece = null
-#	pass
-
-func _on_Board_release(pos):
-	var n = get_numbers(pos)
-	print(piece)
+func _on_Board_release(pos, white):
+	var n = get_numbers(pos.name)
+	model.unhighlight_all()
+	model.highlight_square(pos)
 	if piece != null:
 		model.deselect(piece)
 		move(piece.position[0], piece.position[1], n[0], n[1])
@@ -50,8 +43,10 @@ func _on_Board_release(pos):
 func _on_Piece_grab(id):
 	piece = id
 	model.select(piece)
-#	$OmniLight.show()
-#	$OmniLight.translation = Vector3(.45*id.position[0], .1, .45*id.position[1])
+	model.unhighlight_all()
+	var moves = data.get_piece_moves(data.get_piece_id(piece), piece.position[0], piece.position[1])
+	for m in moves:
+		model.highlight_square(model.get_square(m[0], m[1]))
 
 func get_numbers(pos):
 	var numbers = []

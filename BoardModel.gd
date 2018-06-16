@@ -4,10 +4,12 @@ const squareLength = 0.450
 const origin = Vector3(-0.19, 0, -0.07)
 var white
 var black
+var board
 
-func _init(whitePieces, blackPieces):
+func _init(whitePieces, blackPieces, board):
 	white = whitePieces
 	black = blackPieces
+	self.board = board
 	for piece in whitePieces.get_children():
 		piece.set_material(load("res://Pieces/white.tres"))
 		piece.white = true
@@ -18,8 +20,7 @@ func _init(whitePieces, blackPieces):
 		attach(piece)
 
 func attach(piece):
-	piece.connect("selected", self, "select", [piece])
-	piece.connect("dropped", self, "deselect", [piece])
+	piece.connect("selected", self, "select")
 
 func hide_all_pieces():
 	for c in white.get_children():
@@ -41,19 +42,18 @@ func update_pieces(position):
 				horz += 1
 				adjust_one_piece(character, horz, vert)
 
-func select(piece):
+func deselect_all():
 	for i in white.get_children():
 		deselect(i)
 	for i in black.get_children():
 		deselect(i)
+
+func select(piece):
+	deselect_all()
 	if piece.white:
 		piece.set_material(load("res://Pieces/WhiteHighlight.tres"))
-		piece.get_material().emission = Color(0.5,0.8,1)
-		piece.get_material().emission_enabled = true
 	else:
 		piece.set_material(load("res://Pieces/BlackHighlight.tres"))
-		piece.get_material().emission = Color(1,0.7,0.4)
-		piece.get_material().emission_enabled = true
 
 func deselect(piece):
 	if piece.white:
@@ -61,12 +61,68 @@ func deselect(piece):
 	else:
 		piece.set_material(load("res://Pieces/black.tres"))
 
-func highlight_square(x, y):
-	var square
-	if (x + y) % 2 == 1:
-		square.set_surface_material(0, load("res://Pieces/BlackHighlight.tres"))
+func unhighlight_all():
+	for i in board.get_node("White").get_children():
+		unhighlight_square(i)
+	for i in board.get_node("Black").get_children():
+		unhighlight_square(i)
+
+func highlight_square(pos):
+	var colorWhite = get_square_color(pos)
+	if colorWhite:
+		pos.set_surface_material(0, load("res://Pieces/WhiteHighlight.tres"))
 	else:
-		square.set_surface_material(0, load("res://Pieces/WhiteHighlight.tres"))
+		pos.set_surface_material(0, load("res://Pieces/BlackHighlight.tres"))
+
+func get_square_color(square):
+	var letter = alphaToNum(square.name[0])
+	var number = int(square.name[1])-1
+	if ((letter + number) % 2) == 1:
+		return true
+	else:
+		return false
+
+func unhighlight_square(pos):
+	var colorWhite = get_square_color(pos)
+	if colorWhite:
+		pos.set_surface_material(0, load("res://Pieces/white.tres"))
+	else:
+		pos.set_surface_material(0, load("res://Pieces/black.tres"))
+
+func get_square(x, y):
+	var squares
+	x = 7 - x
+	y = 7 - y
+	if ((x + y) % 2) == 1:
+		squares = board.get_node("White")
+	else:
+		squares = board.get_node("Black")
+	var squareName = numToAlpha(x)
+	squareName = squareName + str(y+1)
+	return squares.get_node(squareName)
+
+func alphaToNum(l):
+	match l:
+		"A": return 0
+		"B": return 1
+		"C": return 2
+		"D": return 3
+		"E": return 4
+		"F": return 5
+		"G": return 6
+		"H": return 7
+
+func numToAlpha(n):
+	match n:
+		0: return "A"
+		1: return "B"
+		2: return "C"
+		3: return "D"
+		4: return "E"
+		5: return "F"
+		6: return "G"
+		7: return "H"
+
 
 func adjust_one_piece(id, horz, vert):
 	var piece
@@ -75,7 +131,7 @@ func adjust_one_piece(id, horz, vert):
 	else:
 		piece = id
 	piece.show()
-	piece.position = [horz, 9-vert]
+	piece.position = [horz-1, 8-vert]
 	piece.translation = Vector3(origin.x + squareLength * horz, origin.y, origin.z + squareLength * vert)
 
 var pawnCount = [0,0]

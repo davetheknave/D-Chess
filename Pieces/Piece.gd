@@ -12,7 +12,6 @@ func _ready():
 func _on_input(camera, event, click_position, click_normal, shape_idx):
 	if event is InputEventMouseButton:
 		if event.pressed:
-			print(self.name)
 			emit_signal("selected", self)
 
 func set_material(material):

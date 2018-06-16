@@ -5,7 +5,7 @@ var castleWA = true
 var castleWH = true
 var castleBA = true
 var castleBH = true
-var enPassant = null
+var enPassant = [-1,-1]
 var position = []
 var turnCount = 1
 var halfTurnsFifty = 0
@@ -14,6 +14,9 @@ const START_POSITION = ["rnbqkbnr","pppppppp","11111111","11111111","11111111","
 func _init():
 	position = START_POSITION
 
+# x and y are the current position
+# newX and newY are the target position
+# this will destroy piece that is at the target
 func move(x, y, newX, newY):
 	position[newY][newX] = position[y][x]
 	position[y][x] = '1'
@@ -37,7 +40,7 @@ func is_valid_move(x, y, newX, newY):
 		print("No move detected")
 		return false
 	
-	var piece = get_piece_at(7,7)
+	var piece = get_piece_at(x,y)
 	# Don't move nothing
 	if piece == '1':
 		print("No piece detected")
@@ -60,24 +63,34 @@ func is_valid_move(x, y, newX, newY):
 	# Check king protection during castle
 	return true
 
+# Given x y coordinates, return the letter at that position
 func get_piece_at(x, y):
 	if !bounds(x) or !bounds(y):
 		return '0'
-	return position[x][y]
+	return position[7-y][x]
 
+# given a piece node, return the letter at that position
+func get_piece_id(piece):
+	return get_piece_at(piece.position[0], piece.position[1])
+
+# piece is the letter id of the piece (r for black rook, B for white bishop etc), x and y are the position of that piece
 func get_piece_moves(piece, x, y):
 	piece = piece.to_lower()
 	var moveList = []
 	match piece:
 		"r", "q":
-			for i in range(x, 8):
-				append_move(moveList, i, y)
-			for i in range(y, 8):
-				append_move(moveList, x, i)
-			for i in range(0, x):
-				append_move(moveList, i, y)
-			for i in range(0, y):
-				append_move(moveList, x, i)
+			for i in range(x+1, 8):
+				if append_move(moveList, i, y):
+					break
+			for i in range(y+1, 8):
+				if append_move(moveList, x, i):
+					break
+			for i in range(x-1, -1, -1):
+				if append_move(moveList, i, y):
+					break
+			for i in range(y-1, -1, -1):
+				if append_move(moveList, x, i):
+					break
 			continue
 		"b", "q":
 			var nx = x
@@ -142,45 +155,46 @@ func get_piece_moves(piece, x, y):
 						append_move(moveList, x + 2, y)
 		"p":
 			if whiteNext:
-				var d1 = get_piece_at(x + 1, y - 1)
-				if (d1 != '1' and d1.to_lower == d1) or (d1 == '1' and x == enPassant[0] and y == enPassant[1]):
-					append_move(moveList, x + 1, y - 1)
-				d1 = get_piece_at(x - 1, y - 1)
-				if (d1 != '1' and d1.to_lower == d1) or (d1 == '1' and x == enPassant[0] and y == enPassant[1]):
-					append_move(moveList, x - 1, y - 1)
-				if get_piece_at(x, y - 1) == '1':
-					append_move(moveList, x, y - 1)
-				else:
-					continue
-				if y == 1 and get_piece_at(x, y - 2) == '1':
-					append_move(moveList, x, y - 2)
-			else:
 				var d1 = get_piece_at(x + 1, y + 1)
-				if (d1 != '1' and d1.to_lower == d1) or (d1 == '1' and x == enPassant[0] and y == enPassant[1]):
+				if (d1 != '1' and d1.to_lower() == d1) or (d1 == '1' and x == enPassant[0] and y == enPassant[1]):
 					append_move(moveList, x + 1, y + 1)
 				d1 = get_piece_at(x - 1, y + 1)
-				if (d1 != '1' and d1.to_lower == d1) or (d1 == '1' and x == enPassant[0] and y == enPassant[1]):
+				if (d1 != '1' and d1.to_lower() == d1) or (d1 == '1' and x == enPassant[0] and y == enPassant[1]):
 					append_move(moveList, x - 1, y + 1)
 				if get_piece_at(x, y + 1) == '1':
 					append_move(moveList, x, y + 1)
 				else:
 					continue
-				if y == 6 and get_piece_at(x, y + 2) == '1':
+				if y == 1 and get_piece_at(x, y + 2) == '1':
 					append_move(moveList, x, y + 2)
-	print(moveList)
+			else:
+				var d1 = get_piece_at(x + 1, y - 1)
+				if (d1 != '1' and d1.to_upper() == d1) or (d1 == '1' and x == enPassant[0] and y == enPassant[1]):
+					append_move(moveList, x + 1, y - 1)
+				d1 = get_piece_at(x - 1, y - 1)
+				if (d1 != '1' and d1.to_upper() == d1) or (d1 == '1' and x == enPassant[0] and y == enPassant[1]):
+					append_move(moveList, x - 1, y - 1)
+				if get_piece_at(x, y - 1) == '1':
+					append_move(moveList, x, y - 1)
+				else:
+					continue
+				if y == 6 and get_piece_at(x, y - 2) == '1':
+					append_move(moveList, x, y - 2)
 	return moveList
 
 # Append a move if possible, and return true if no more moves after can be made
 func append_move(list, x, y):
 	if !bounds(x): return true
 	if !bounds(y): return true
+	print(str(x), str(y))
 	var piece = get_piece_at(x, y)
-	if piece.to_upper() == piece and whiteNext:
-		return true
-	elif piece.to_upper() != piece and !whiteNext:
-		return true
+	if piece != '1':
+		if piece.to_upper() == piece and whiteNext:
+			return true
+		elif piece.to_lower() == piece and !whiteNext:
+			return true
 	list.append([x, y])
-	if piece == '1':
+	if piece != '1':
 		return true
 	return false
 
