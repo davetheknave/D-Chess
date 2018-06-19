@@ -46,6 +46,10 @@ func _on_Piece_grab(id):
 	piece = id
 	model.select(piece)
 	model.unhighlight_all()
+	if piece.white and not data.whiteNext:
+		return
+	if not piece.white and data.whiteNext:
+		return
 	var moves = data.get_piece_moves(data.get_piece_id(piece), piece.position[0], piece.position[1])
 	for m in moves:
 		model.highlight_square(model.get_square(m[0], m[1]))
