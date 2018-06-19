@@ -7,7 +7,7 @@
 
 [sub_resource type="BoxShape" id=1]
 
-extents = Vector3( 0.181087, 0.362145, 0.188575 )
+extents = Vector3( 0.0658111, 0.362145, 0.127094 )
 
 [node name="Knight" instance=ExtResource( 1 )]
 
