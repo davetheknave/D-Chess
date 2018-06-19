@@ -15,6 +15,8 @@ func _ready():
 		i.connect("selected", self, "_on_Piece_grab")
 	for i in $BlackPieces.get_children():
 		i.connect("selected", self, "_on_Piece_grab")
+	data.connect("promotion", self, "promote")
+	$HUD.connect("promoted", self, "finish_promotion")
 	update()
 	pass
 
@@ -47,6 +49,21 @@ func _on_Piece_grab(id):
 	var moves = data.get_piece_moves(data.get_piece_id(piece), piece.position[0], piece.position[1])
 	for m in moves:
 		model.highlight_square(model.get_square(m[0], m[1]))
+
+var px
+var py
+
+func promote(x, y):
+	get_tree().paused = true
+	px = x
+	py = y
+	$HUD.promote()
+
+func finish_promotion(piece):
+	get_tree().paused = false
+	if data.whiteNext:
+		piece = piece.to_upper()
+	data.position[7-py][px] = piece
 
 func get_numbers(pos):
 	var numbers = []

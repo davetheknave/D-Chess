@@ -173,6 +173,9 @@ _sections_unfolded = [ "Transform" ]
 
 [node name="HUD" parent="." index="4" instance=ExtResource( 9 )]
 
+pause_mode = 2
+_sections_unfolded = [ "Pause" ]
+
 [connection signal="release" from="Board" to="." method="_on_Board_release"]
 
 

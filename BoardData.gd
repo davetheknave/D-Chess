@@ -1,5 +1,7 @@
 extends Node
 
+signal promotion(x, y)
+
 var whiteNext = true
 var castleWA = true
 var castleWH = true
@@ -20,11 +22,26 @@ func _init():
 func move(x, y, newX, newY):
 	position[newY][newX] = position[y][x]
 	position[y][x] = '1'
+
+	# add en passant flag
+	# castle
+	# do en passant
+	pawn_promotion()
 	whiteNext = !whiteNext
 	if whiteNext:
 		turnCount += 1
 	halfTurnsFifty += 1
+	print(position)
 	return position
+
+func pawn_promotion():
+	for i in 8:
+		if whiteNext:
+			if get_piece_at(i, 7) == "P":
+				emit_signal("promotion", i, 7)
+		else:
+			if get_piece_at(i, 0) == "P":
+				emit_signal("promotion", i, 0)
 
 func reset_game():
 	position = START_POSITION
