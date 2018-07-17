@@ -1,7 +1,8 @@
-[gd_scene load_steps=4 format=2]
+[gd_scene load_steps=5 format=2]
 
 [ext_resource path="res://Pieces/Piece.tscn" type="PackedScene" id=1]
-[ext_resource path="res://models/bKing.scn" type="PackedScene" id=2]
+[ext_resource path="res://Pieces/King.gd" type="Script" id=2]
+[ext_resource path="res://models/bKing.scn" type="PackedScene" id=3]
 
 [sub_resource type="BoxShape" id=1]
 
@@ -9,6 +10,7 @@ extents = Vector3( 0.100422, 0.516759, 0.107044 )
 
 [node name="King" instance=ExtResource( 1 )]
 
+script = ExtResource( 2 )
 shape = NodePath("bKing")
 
 [node name="CollisionShape" parent="Area" index="0"]
@@ -16,7 +18,7 @@ shape = NodePath("bKing")
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0.19766, 0.484661, 0.203103 )
 shape = SubResource( 1 )
 
-[node name="bKing" parent="." index="1" instance=ExtResource( 2 )]
+[node name="bKing" parent="." index="1" instance=ExtResource( 3 )]
 
 transform = Transform( 0.1, 0, 0, 0, 0.1, 0, 0, 0, 0.1, -7.26691, -0.44004, 0.444075 )
 _sections_unfolded = [ "Transform" ]

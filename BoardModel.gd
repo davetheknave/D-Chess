@@ -11,11 +11,11 @@ func _init(whitePieces, blackPieces, board):
 	black = blackPieces
 	self.board = board
 	for piece in whitePieces.get_children():
-		piece.set_material(load("res://Pieces/white.tres"))
+		piece.set_material(load("res://Pieces/White.tres"))
 		piece.white = true
 		attach(piece)
 	for piece in blackPieces.get_children():
-		piece.set_material(load("res://Pieces/black.tres"))
+		piece.set_material(load("res://Pieces/Black.tres"))
 		piece.white = false
 		attach(piece)
 
@@ -57,9 +57,9 @@ func select(piece):
 
 func deselect(piece):
 	if piece.white:
-		piece.set_material(load("res://Pieces/white.tres"))
+		piece.set_material(load("res://Pieces/White.tres"))
 	else:
-		piece.set_material(load("res://Pieces/black.tres"))
+		piece.set_material(load("res://Pieces/Black.tres"))
 
 func unhighlight_all():
 	for i in board.get_node("White").get_children():
@@ -85,9 +85,9 @@ func get_square_color(square):
 func unhighlight_square(pos):
 	var colorWhite = get_square_color(pos)
 	if colorWhite:
-		pos.set_surface_material(0, load("res://Pieces/white.tres"))
+		pos.set_surface_material(0, load("res://Pieces/White.tres"))
 	else:
-		pos.set_surface_material(0, load("res://Pieces/black.tres"))
+		pos.set_surface_material(0, load("res://Pieces/Black.tres"))
 
 func get_square(x, y):
 	var squares
@@ -138,6 +138,8 @@ var pawnCount = [0,0]
 var bishopCount = [0,0]
 var knightCount = [0,0]
 var rookCount = [0,0]
+var kingCount = [0,0]
+var queenCount = [0,0]
 func get_piece(name):
 	var side
 	var sideID
@@ -150,7 +152,15 @@ func get_piece(name):
 	name = name.to_lower()
 	match name:
 		"k": return side.get_node("King")
-		"q": return side.get_node("Queen")
+#			kingCount[sideID] += 1
+#			if kingCount[sideID] > 8:
+#				kingCount[sideID] = 1
+#			return side.get_node("King" + str(kingCount[sideID]))
+		"q": return side.get_node("King")
+#			queenCount[sideID] += 1
+#			if queenCount[sideID] > 8:
+#				queenCount[sideID] = 1
+#			return side.get_node("Queen" + str(queenCount[sideID]))
 		"p":
 			pawnCount[sideID] += 1
 			if pawnCount[sideID] > 8:

@@ -1,7 +1,8 @@
-[gd_scene load_steps=4 format=2]
+[gd_scene load_steps=5 format=2]
 
 [ext_resource path="res://Pieces/Piece.tscn" type="PackedScene" id=1]
-[ext_resource path="res://models/bBishopL.scn" type="PackedScene" id=2]
+[ext_resource path="res://Pieces/Bishop.gd" type="Script" id=2]
+[ext_resource path="res://models/bBishopL.scn" type="PackedScene" id=3]
 
 [sub_resource type="BoxShape" id=1]
 
@@ -9,6 +10,7 @@ extents = Vector3( 0.0747298, 0.382938, 0.164927 )
 
 [node name="Bishop" instance=ExtResource( 1 )]
 
+script = ExtResource( 2 )
 shape = NodePath("bBishopL")
 
 [node name="CollisionShape" parent="Area" index="0"]
@@ -16,7 +18,7 @@ shape = NodePath("bBishopL")
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0.161453, 0.400838, 0.163649 )
 shape = SubResource( 1 )
 
-[node name="bBishopL" parent="." index="1" instance=ExtResource( 2 )]
+[node name="bBishopL" parent="." index="1" instance=ExtResource( 3 )]
 
 transform = Transform( 0.1, 0, 0, 0, 0.1, 0, 0, 0, 0.1, -6.31441, -0.435996, 0.419362 )
 _sections_unfolded = [ "Transform" ]

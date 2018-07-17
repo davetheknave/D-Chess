@@ -15,6 +15,10 @@ const START_POSITION = ["rnbqkbnr","pppppppp","11111111","11111111","11111111","
 
 func _init():
 	position = START_POSITION
+	castleWA = true
+	castleWH = true
+	castleBA = true
+	castleBH = true
 
 # x and y are the current position
 # newX and newY are the target position
@@ -31,7 +35,6 @@ func move(x, y, newX, newY):
 	if whiteNext:
 		turnCount += 1
 	halfTurnsFifty += 1
-	print(position)
 	return position
 
 func pawn_promotion():
@@ -40,7 +43,7 @@ func pawn_promotion():
 			if get_piece_at(i, 7) == "P":
 				emit_signal("promotion", i, 7)
 		else:
-			if get_piece_at(i, 0) == "P":
+			if get_piece_at(i, 0) == "p":
 				emit_signal("promotion", i, 0)
 
 func reset_game():
