@@ -3,7 +3,7 @@ extends Spatial
 signal selected(piece)
 export (NodePath) var shape
 
-var position = [0,0]
+var position = null
 var white = true
 var alice = false
 var board

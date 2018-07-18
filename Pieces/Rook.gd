@@ -1,5 +1,9 @@
 extends "res://Pieces/Piece.gd"
 
+signal move(A)
+
+var moved = false
+
 func get_name():
 	return str(white) + "ROOK"
 
@@ -20,3 +24,18 @@ func get_moves(board):
 		if append_move(moveList, x, i):
 			break
 	return moveList
+
+func move(x, y):
+	if not moved:
+		moved = true
+		if position[0] == 0:
+			emit_signal("move", true)
+		else:
+			emit_signal("move", false)
+	.move(x, y)
+
+func castle(A):
+	if position[0] == 0 and A:
+		board.move(self, position[0] + 3, position[1])
+	elif position[0] == 7 and !A:
+		board.move(self, position[0] - 2, position[1])

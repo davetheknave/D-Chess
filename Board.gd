@@ -8,10 +8,11 @@ export (PackedScene) var rook
 export (PackedScene) var knight
 
 signal promote(piece)
+signal turn(white)
 
 const squareLength = 0.495
 const origin = Vector3(-0.99, 0.5, -0.4)
-const START_POSITION = ["rnbqkbn1","pppppppP","11111111","11111111","11111111","11111111","PPPPPPPp","RNBQKBN1"]
+const START_POSITION = ["rnbqkbnr","pppppppp","11111111","11111111","11111111","11111111","PPPPPPPP","RNBQKBNR"]
 
 var squares = []
 var currentPiece
@@ -28,8 +29,6 @@ func _ready():
 	pass
 	for x in 8:
 		squares.append([null,null,null,null,null,null,null,null])
-		for y in 8:
-			squares[x][y] = null
 	set_up_board(START_POSITION)
 
 func set_up_board(position):
@@ -57,6 +56,20 @@ func set_up_board(position):
 			move(piece, j, i)
 			if "moved" in piece:
 				piece.moved = false
+	var wKing = squares[0][4]
+	var wRookA = squares[0][0]
+	var wRookH = squares[0][7]
+	var bKing = squares[7][4]
+	var bRookA = squares[7][0]
+	var bRookH = squares[7][7]
+	wRookA.connect("move", wKing, "castle_block")
+	wRookH.connect("move", wKing, "castle_block")
+	wKing.connect("castle", wRookA, "castle")
+	wKing.connect("castle", wRookH, "castle")
+	bRookA.connect("move", bKing, "castle_block")
+	bRookH.connect("move", bKing, "castle_block")
+	bKing.connect("castle", bRookA, "castle")
+	bKing.connect("castle", bRookH, "castle")
 
 func piece_clicked(piece):
 	currentPiece = piece
@@ -100,21 +113,24 @@ func get_piece_at(x, y):
 	return squares[y][x]
 
 func move(piece, x, y):
-	# Capture any pieces
-	if squares[y][x] != null:
-		squares[y][x].queue_free()
-	# Update board array
-	squares[piece.position[1]][piece.position[0]] = null
+	if piece.position != null:
+		# Capture any pieces
+		if squares[y][x] != null:
+			squares[y][x].queue_free()
+		# Update board array
+		squares[piece.position[1]][piece.position[0]] = null
+		piece.move(x, y)
+	else:
+		piece.position = [x, y]
 	squares[y][x] = piece
 	# Tell piece its new position
-	piece.move(x, y)
+	
 	# Update board model
 	piece.translation = Vector3(origin.x + squareLength * x, origin.y, origin.z - squareLength * y)
 
 func mouse_over(camera, event, click_position, click_normal, shape_idx, pos, white):
 	if event is InputEventMouseButton:
 		if !event.pressed:
-			emit_signal("release", pos, white)
 			if currentPiece != null:
 				var truePosition = get_numbers(pos.name)
 				try_move(currentPiece, truePosition[0], truePosition[1])
@@ -130,6 +146,7 @@ func try_move(piece, x, y):
 	if moveValid:
 		move(piece, x, y)
 		whiteNext = !whiteNext
+		emit_signal("turn", whiteNext)
 
 func get_numbers(pos):
 	var numbers = []
