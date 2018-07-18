@@ -7,9 +7,11 @@ export (PackedScene) var pawn
 export (PackedScene) var rook
 export (PackedScene) var knight
 
+signal promote(piece)
+
 const squareLength = 0.495
 const origin = Vector3(-0.99, 0.5, -0.4)
-const START_POSITION = ["rnbqkbnr","pppppppp","11111111","11111111","11111111","11111111","PPPPPPPP","RNBQKBNR"]
+const START_POSITION = ["rnbqkbn1","pppppppP","11111111","11111111","11111111","11111111","PPPPPPPp","RNBQKBN1"]
 
 var squares = []
 var currentPiece
@@ -59,6 +61,26 @@ func set_up_board(position):
 func piece_clicked(piece):
 	currentPiece = piece
 	deselect_all()
+
+func promote(piece):
+	emit_signal("promote", piece)
+
+func finish_promotion(newPiece):
+	var x = currentPiece.position[0]
+	var y = currentPiece.position[1]
+	var piece
+	match newPiece:
+		'q': piece = queen.instance()
+		'n': piece = knight.instance()
+		'b': piece = bishop.instance()
+		'r': piece = rook.instance()
+	add_child(piece)
+	piece.set_white(currentPiece.white)
+	piece.board = self
+	piece.connect("selected", self, "piece_clicked")
+	move(piece, x, y)
+	squares[y][x] = piece
+	currentPiece.queue_free()
 
 func deselect_all():
 	for i in squares:

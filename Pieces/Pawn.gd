@@ -47,6 +47,8 @@ func get_forwards(board, x, y):
 func move(x, y):
 	.move(x, y)
 	moved = true
+	if (white and y == 7) or (not white and y == 0):
+		board.promote(self)
 
 func get_name():
 	return str(white) + "PAWN"
