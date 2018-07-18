@@ -56,10 +56,10 @@ func deselect():
 	else:
 		set_material(load("res://Pieces/Black.tres"))
 
-
+# Appends a move if it is possible, and returns true if no more moves can be made in this direction
 func append_move(list, x, y):
-	if !bounds(x): return true
-	if !bounds(y): return true
+	if !board.bounds(x): return true
+	if !board.bounds(y): return true
 	var piece = board.get_piece_at(x, y)
 	if piece != null:
 		if piece.white and white:
@@ -67,10 +67,10 @@ func append_move(list, x, y):
 		elif !piece.white and !white:
 			return true
 	list.append([x, y])
+	if piece!= null:
+		return true
 	return false
 
-func bounds(n):
-	if n < 0 or n > 7:
-		return false
-	else:
-		return true
+func move(x, y):
+	position[0] = x
+	position[1] = y

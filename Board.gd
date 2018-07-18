@@ -14,6 +14,7 @@ const START_POSITION = ["rnbqkbnr","pppppppp","11111111","11111111","11111111","
 var squares = []
 var currentPiece
 var whiteNext = true
+var enPassant = [-1,-1]
 
 signal release(name)
 
@@ -52,6 +53,8 @@ func set_up_board(position):
 			piece.board = self
 			piece.connect("selected", self, "piece_clicked")
 			move(piece, j, i)
+			if "moved" in piece:
+				piece.moved = false
 
 func piece_clicked(piece):
 	currentPiece = piece
@@ -70,6 +73,8 @@ func attach(square, white):
 	body.connect("input_event", self, "mouse_over", [square, white], CONNECT_DEFERRED)
 
 func get_piece_at(x, y):
+	if !bounds(x) or !bounds(y):
+		return null
 	return squares[y][x]
 
 func move(piece, x, y):
@@ -80,8 +85,7 @@ func move(piece, x, y):
 	squares[piece.position[1]][piece.position[0]] = null
 	squares[y][x] = piece
 	# Tell piece its new position
-	piece.position[0] = x
-	piece.position[1] = y
+	piece.move(x, y)
 	# Update board model
 	piece.translation = Vector3(origin.x + squareLength * x, origin.y, origin.z - squareLength * y)
 
@@ -120,3 +124,9 @@ func get_numbers(pos):
 	numbers[0] = 8 - numbers[0]
 	numbers[1] = 8 - numbers[1]
 	return numbers
+	
+func bounds(n):
+	if n < 0 or n > 7:
+		return false
+	else:
+		return true

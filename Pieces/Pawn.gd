@@ -1,5 +1,7 @@
 extends "res://Pieces/Piece.gd"
 
+var moved = false
+
 func _ready():
 	pass
 
@@ -7,33 +9,44 @@ func get_moves(board):
 	var moveList = []
 	var x = position[0]
 	var y = position[1]
-#	if board.whiteNext:
-#		var d1 = get_piece_at(x + 1, y + 1)
-#		if (d1 != '1' and d1.to_lower() == d1) or (d1 == '1' and x == enPassant[0] and y == enPassant[1]):
-#			append_move(moveList, x + 1, y + 1)
-#		d1 = get_piece_at(x - 1, y + 1)
-#		if (d1 != '1' and d1.to_lower() == d1) or (d1 == '1' and x == enPassant[0] and y == enPassant[1]):
-#			append_move(moveList, x - 1, y + 1)
-#		if get_piece_at(x, y + 1) == '1':
-#			append_move(moveList, x, y + 1)
-#		else:
-#			continue
-#		if y == 1 and get_piece_at(x, y + 2) == '1':
-#			append_move(moveList, x, y + 2)
-#	else:
-#		var d1 = get_piece_at(x + 1, y - 1)
-#		if (d1 != '1' and d1.to_upper() == d1) or (d1 == '1' and x == enPassant[0] and y == enPassant[1]):
-#			append_move(moveList, x + 1, y - 1)
-#		d1 = get_piece_at(x - 1, y - 1)
-#		if (d1 != '1' and d1.to_upper() == d1) or (d1 == '1' and x == enPassant[0] and y == enPassant[1]):
-#			append_move(moveList, x - 1, y - 1)
-#		if get_piece_at(x, y - 1) == '1':
-#			append_move(moveList, x, y - 1)
-#		else:
-#			continue
-#		if y == 6 and get_piece_at(x, y - 2) == '1':
-#			append_move(moveList, x, y - 2)
+	# Captures
+	for m in get_diagonals(board, x, y):
+		var p = board.get_piece_at(m[0], m[1])
+		if p != null and p.white != white or (p == null and x == board.enPassant[0] and y == board.enPassant[1]):
+			append_move(moveList, m[0], m[1])
+	# Normal move
+	for m in get_forwards(board, x, y):
+		var p = board.get_piece_at(m[0], m[1])
+		if p != null:
+			break
+		append_move(moveList, m[0], m[1])
 	return moveList
+
+func get_diagonals(board, x, y):
+	var diags = []
+	if white:
+		diags.append([x - 1, y + 1])
+		diags.append([x + 1, y + 1])
+	else:
+		diags.append([x - 1, y - 1])
+		diags.append([x + 1, y - 1])
+	return diags
+
+func get_forwards(board, x, y):
+	var forwards = []
+	if white:
+		forwards.append([x, y + 1])
+		if not moved:
+			forwards.append([x, y + 2])
+	else:
+		forwards.append([x, y - 1])
+		if not moved:
+			forwards.append([x, y - 2])
+	return forwards
+
+func move(x, y):
+	.move(x, y)
+	moved = true
 
 func get_name():
 	return str(white) + "PAWN"
