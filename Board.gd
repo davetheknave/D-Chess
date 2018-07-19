@@ -10,7 +10,7 @@ export (PackedScene) var knight
 signal promote(piece)
 signal turn(white)
 
-const squareLength = 0.495
+const squareLength = 0.5
 const origin = Vector3(-0.99, 0.5, -0.4)
 const START_POSITION = ["rnbqkbnr","pppppppp","11111111","11111111","11111111","11111111","PPPPPPPP","RNBQKBNR"]
 
@@ -23,10 +23,9 @@ signal release(name)
 
 func _ready():
 	for i in $White.get_children():
-		attach(i, true)
+		attach_square(i, true)
 	for i in $Black.get_children():
-		attach(i, false)
-	pass
+		attach_square(i, false)
 	for x in 8:
 		squares.append([null,null,null,null,null,null,null,null])
 	set_up_board(START_POSITION)
@@ -102,7 +101,7 @@ func deselect_all():
 				continue
 			j.deselect()
 
-func attach(square, white):
+func attach_square(square, white):
 	square.create_convex_collision()
 	var body = square.get_node(square.name+"_col")
 	body.connect("input_event", self, "mouse_over", [square, white], CONNECT_DEFERRED)
@@ -127,6 +126,14 @@ func move(piece, x, y):
 	
 	# Update board model
 	piece.translation = Vector3(origin.x + squareLength * x, origin.y, origin.z - squareLength * y)
+
+func enPassant():
+	if enPassant[1] == 5:
+		squares[4][enPassant[0]].queue_free()
+		squares[4][enPassant[0]] = null
+	if enPassant[1] == 2:
+		squares[3][enPassant[0]].queue_free()
+		squares[3][enPassant[0]] = null
 
 func mouse_over(camera, event, click_position, click_normal, shape_idx, pos, white):
 	if event is InputEventMouseButton:

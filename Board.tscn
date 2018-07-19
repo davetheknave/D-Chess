@@ -1232,7 +1232,7 @@ surfaces/0 = {
 }
 _sections_unfolded = [ "surface_1" ]
 
-[node name="Board" type="Spatial"]
+[node name="Board" type="Spatial" index="0"]
 
 script = ExtResource( 1 )
 king = ExtResource( 2 )
@@ -1245,6 +1245,8 @@ knight = ExtResource( 7 )
 [node name="Edges" parent="." index="0" instance=ExtResource( 8 )]
 
 [node name="White" type="Spatial" parent="." index="1"]
+
+editor/display_folded = true
 
 [node name="B1" type="MeshInstance" parent="White" index="0"]
 

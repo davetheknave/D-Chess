@@ -9,7 +9,7 @@
 
 extents = Vector3( 0.132554, 0.255361, 0.131698 )
 
-[node name="Rook" index="0" instance=ExtResource( 1 )]
+[node name="Rook" instance=ExtResource( 1 )]
 
 script = ExtResource( 2 )
 shape = NodePath("bRookL")

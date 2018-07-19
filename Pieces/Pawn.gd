@@ -12,7 +12,7 @@ func get_moves(board):
 	# Captures
 	for m in get_diagonals(board, x, y):
 		var p = board.get_piece_at(m[0], m[1])
-		if p != null and p.white != white or (p == null and x == board.enPassant[0] and y == board.enPassant[1]):
+		if (p != null and p.white != white) or (p == null and m[0]== board.enPassant[0] and m[1] == board.enPassant[1]):
 			append_move(moveList, m[0], m[1])
 	# Normal move
 	for m in get_forwards(board, x, y):
@@ -45,10 +45,20 @@ func get_forwards(board, x, y):
 	return forwards
 
 func move(x, y):
-	.move(x, y)
+	var oldX = position[0]
+	var oldY = position[1]
 	moved = true
 	if (white and y == 7) or (not white and y == 0):
 		board.promote(self)
+	if board.enPassant[0] == x and board.enPassant[1] == y:
+		board.enPassant()
+	.move(x, y)
+	if oldY - 2 == y:  # Black double move
+		board.enPassant[0] = x
+		board.enPassant[1] = y + 1
+	if oldY + 2 == y:  # White double move
+		board.enPassant[0] = x
+		board.enPassant[1] = y - 1
 
 func get_name():
 	return str(white) + "PAWN"

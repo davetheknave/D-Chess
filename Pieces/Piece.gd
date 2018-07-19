@@ -74,3 +74,4 @@ func append_move(list, x, y):
 func move(x, y):
 	position[0] = x
 	position[1] = y
+	board.enPassant = [-1, -1]
