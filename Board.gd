@@ -76,26 +76,55 @@ func piece_clicked(piece):
 	deselect_all()
 
 func get_state():
-	var checkW = false
-	var checkB = false
+	var whiteCheck = get_check(true)
+	var whiteHasMoves = has_valid_moves(true)
+	var blackCheck = get_check(false)
+	var blackHasMoves = has_valid_moves(false)
+	if whiteNext:
+		if !whiteHasMoves:
+			if whiteCheck: return States.GameState.WHITECHECKMATE
+			else: return States.GameState.STALEMATE
+	else:
+		if !blackHasMoves:
+			if blackCheck: return States.GameState.BLACKCHECKMATE
+			else: return States.GameState.STALEMATE
+	if whiteCheck: return States.GameState.WHITECHECK
+	elif blackCheck: return States.GameState.BLACKCHECK
+	else: return States.GameState.NORMAL
+	
+
+func get_check(white):
 	for row in squares:
 		for piece in row:
-			if piece == null:
-				continue
-			var moves = piece.get_moves(self)
-			for move in moves:
-				var pieceAtMove = get_piece_at(move[0], move[1])
-				if pieceAtMove != null and pieceAtMove.get_name() == "KING":
-					if pieceAtMove.white:
-						checkW = true
-					else:
-						checkB = true
-	if checkW:
-		return States.GameState.WHITECHECK
-	elif checkB:
-		return States.GameState.BLACKCHECK
-	else:
-		return States.GameState.NORMAL
+			if piece != null and piece.white != white:
+				var moves = piece.get_moves(self)
+				for move in moves:
+					var pieceAtMove = get_piece_at(move[0], move[1])
+					if pieceAtMove != null and pieceAtMove.get_name() == "KING" and pieceAtMove.white == white:
+						return true
+	return false
+
+func has_valid_moves(white):
+	var result = false
+	for row in squares:
+		for piece in row:
+			if piece != null and piece.white == white:
+				var moves = piece.get_moves(self)
+				for move in moves:
+					# Temporary swap
+					var oldTarget = squares[move[1]][move[0]]
+					squares[piece.position[1]][piece.position[0]] = null
+					squares[move[1]][move[0]] = piece
+					piece.alice = !piece.alice
+					# Check test
+					if !get_check(white):
+						result = true
+					# Swap back
+					squares[piece.position[1]][piece.position[0]] = piece
+					squares[move[1]][move[0]] = oldTarget
+					piece.alice = !piece.alice
+	return result
+
 
 func promote(piece):
 	emit_signal("promote", piece)

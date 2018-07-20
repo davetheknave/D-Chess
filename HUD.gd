@@ -17,8 +17,8 @@ func set_state(state):
 		States.GameState.NORMAL: stateLabel.text = "Playing"
 		States.GameState.BLACKCHECK: stateLabel.text = "Black is in check"
 		States.GameState.WHITECHECK: stateLabel.text = "White is in check"
-		States.GameState.BLACKCHECKMATE: stateLabel.text = "Black has won!"
-		States.GameState.WHITECHECKMATE: stateLabel.text = "White has won!"
+		States.GameState.BLACKCHECKMATE: stateLabel.text = "White has won!"
+		States.GameState.WHITECHECKMATE: stateLabel.text = "Black has won!"
 		States.GameState.STALEMATE: stateLabel.text = "Stalemate"
 
 func promote():
