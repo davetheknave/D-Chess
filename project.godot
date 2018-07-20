@@ -14,6 +14,10 @@ config/name="D-Chess"
 run/main_scene="res://Main.tscn"
 config/icon="res://icon.png"
 
+[autoload]
+
+States="*res://States.gd"
+
 [rendering]
 
 quality/filters/use_nearest_mipmap_filter=true

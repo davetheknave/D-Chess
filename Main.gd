@@ -2,12 +2,11 @@ extends Node
 
 var board
 
-var model
-var data
-
 var pos
 
 var piece
+
+var state
 
 func _ready():
 	$HUD.connect("promoted", self, "finish_promotion")
@@ -17,6 +16,8 @@ func _ready():
 
 func change_turn(white):
 	$HUD.turn(white)
+	state = board.get_state()
+	$HUD.set_state(state)
 
 func promote(piece):
 	get_tree().paused = true

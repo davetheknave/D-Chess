@@ -30,7 +30,7 @@ func get_moves(board):
 	return moveList
 
 func get_name():
-	return str(white) + "KING"
+	return "KING"
 
 func move(x, y):
 	castleA = false

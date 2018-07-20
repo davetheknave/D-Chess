@@ -50,6 +50,7 @@ func set_up_board(position):
 				continue
 			add_child(piece)
 			piece.set_white(white)
+			piece.alice = false
 			piece.board = self
 			piece.connect("selected", self, "piece_clicked")
 			move(piece, j, i)
@@ -73,6 +74,28 @@ func set_up_board(position):
 func piece_clicked(piece):
 	currentPiece = piece
 	deselect_all()
+
+func get_state():
+	var checkW = false
+	var checkB = false
+	for row in squares:
+		for piece in row:
+			if piece == null:
+				continue
+			var moves = piece.get_moves(self)
+			for move in moves:
+				var pieceAtMove = get_piece_at(move[0], move[1])
+				if pieceAtMove != null and pieceAtMove.get_name() == "KING":
+					if pieceAtMove.white:
+						checkW = true
+					else:
+						checkB = true
+	if checkW:
+		return States.GameState.WHITECHECK
+	elif checkB:
+		return States.GameState.BLACKCHECK
+	else:
+		return States.GameState.NORMAL
 
 func promote(piece):
 	emit_signal("promote", piece)
