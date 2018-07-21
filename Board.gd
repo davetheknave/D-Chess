@@ -18,6 +18,7 @@ var squares
 var currentPiece
 var whiteNext
 var enPassant
+var turnCount = 0
 
 signal release(name)
 
@@ -101,6 +102,7 @@ func get_state():
 			else: return States.GameState.STALEMATE
 	if whiteCheck: return States.GameState.WHITECHECK
 	elif blackCheck: return States.GameState.BLACKCHECK
+	elif turnCount > 100: return States.GameState.STALEMATE
 	else: return States.GameState.NORMAL
 	
 
@@ -188,14 +190,18 @@ func move(piece, x, y):
 		# Capture any pieces
 		if squares[y][x] != null:
 			squares[y][x].queue_free()
+			turnCount = 0
 		# Update board array
 		squares[piece.position[1]][piece.position[0]] = null
+		# Tell piece to move, and do anything else
 		piece.move(x, y)
 	else:
 		piece.position = [x, y]
 	squares[y][x] = piece
-	# Tell piece its new position
-	
+	# Update turn count
+	if piece.get_name() == "PAWN":
+		turnCount = 0
+	turnCount += 1
 	# Update board model
 	piece.translation = Vector3(origin.x + squareLength * x, origin.y, origin.z - squareLength * y)
 
