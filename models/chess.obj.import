@@ -2,15 +2,15 @@
 
 importer="scene"
 type="PackedScene"
-path="res://.import/chess.obj-82db0ff99f3de05619b40e41ea033010.scn"
+path="res://.import/chess.obj-f283e215d79f26ffad1a4afdd3373cab.scn"
 
 [deps]
 
-source_file="res://chess.obj"
+source_file="res://models/chess.obj"
 source_md5="c37aab20ac0d577d65ab7dc104130ce0"
 
-dest_files=[ "res://.import/chess.obj-82db0ff99f3de05619b40e41ea033010.scn" ]
-dest_md5="bd4e1a83682ae133bdbae92d4e93eb49"
+dest_files=[ "res://.import/chess.obj-f283e215d79f26ffad1a4afdd3373cab.scn" ]
+dest_md5="d416a824bcc0ba4c3fd72dedc03e4456"
 
 [params]
 

@@ -1232,7 +1232,7 @@ surfaces/0 = {
 }
 _sections_unfolded = [ "surface_1" ]
 
-[node name="Board" type="Spatial" index="0"]
+[node name="Board" type="Spatial"]
 
 script = ExtResource( 1 )
 king = ExtResource( 2 )
