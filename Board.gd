@@ -14,10 +14,10 @@ const squareLength = 0.5
 const origin = Vector3(-0.99, 0.5, -0.4)
 const START_POSITION = ["rnbqkbnr","pppppppp","11111111","11111111","11111111","11111111","PPPPPPPP","RNBQKBNR"]
 
-var squares = []
+var squares
 var currentPiece
-var whiteNext = true
-var enPassant = [-1,-1]
+var whiteNext
+var enPassant
 
 signal release(name)
 
@@ -26,12 +26,23 @@ func _ready():
 		attach_square(i, true)
 	for i in $Black.get_children():
 		attach_square(i, false)
-	for x in 8:
-		squares.append([null,null,null,null,null,null,null,null])
+	reset()
+
+func reset():
+	if squares != null:
+		for i in squares:
+			for j in i:
+				if j != null:
+					j.queue_free()
+	squares = []
+	whiteNext = true
+	enPassant = [-1,-1]
+	currentPiece = null
 	set_up_board(START_POSITION)
 
 func set_up_board(position):
 	for i in 8:
+		squares.append([null,null,null,null,null,null,null,null])
 		for j in 8:
 			var white
 			var piece
@@ -104,6 +115,22 @@ func get_check(white):
 						return true
 	return false
 
+func check_move(piece, x, y):
+	var result = false
+	# Temporary swap
+	var oldTarget = squares[y][x]
+	squares[piece.position[1]][piece.position[0]] = null
+	squares[y][x] = piece
+	piece.alice = !piece.alice
+	# Check test
+	if !get_check(piece.white):
+		result = true
+	# Swap back
+	squares[piece.position[1]][piece.position[0]] = piece
+	squares[y][x] = oldTarget
+	piece.alice = !piece.alice
+	return result
+
 func has_valid_moves(white):
 	var result = false
 	for row in squares:
@@ -111,20 +138,9 @@ func has_valid_moves(white):
 			if piece != null and piece.white == white:
 				var moves = piece.get_moves(self)
 				for move in moves:
-					# Temporary swap
-					var oldTarget = squares[move[1]][move[0]]
-					squares[piece.position[1]][piece.position[0]] = null
-					squares[move[1]][move[0]] = piece
-					piece.alice = !piece.alice
-					# Check test
-					if !get_check(white):
+					if check_move(piece, move[0], move[1]):
 						result = true
-					# Swap back
-					squares[piece.position[1]][piece.position[0]] = piece
-					squares[move[1]][move[0]] = oldTarget
-					piece.alice = !piece.alice
 	return result
-
 
 func promote(piece):
 	emit_signal("promote", piece)
@@ -180,12 +196,13 @@ func move(piece, x, y):
 	piece.translation = Vector3(origin.x + squareLength * x, origin.y, origin.z - squareLength * y)
 
 func enPassant():
-	if enPassant[1] == 5:
-		squares[4][enPassant[0]].queue_free()
-		squares[4][enPassant[0]] = null
-	if enPassant[1] == 2:
-		squares[3][enPassant[0]].queue_free()
-		squares[3][enPassant[0]] = null
+	if squares[enPassant[1]][enPassant[0]] == null:
+		if enPassant[1] == 5 and squares[4][enPassant[0]].alice == currentPiece.alice:
+			squares[4][enPassant[0]].queue_free()
+			squares[4][enPassant[0]] = null
+		if enPassant[1] == 2 and squares[3][enPassant[0]].alice == currentPiece.alice:
+			squares[3][enPassant[0]].queue_free()
+			squares[3][enPassant[0]] = null
 
 func mouse_over(camera, event, click_position, click_normal, shape_idx, pos, white):
 	if event is InputEventMouseButton:
@@ -202,6 +219,9 @@ func try_move(piece, x, y):
 	if not [x, y] in piece.get_moves(self):
 		moveValid = false
 		print("That piece doesn't move that way!")
+	if not check_move(piece, x, y):
+		moveValid = false
+		print("You cannot move into check!")
 	if moveValid:
 		move(piece, x, y)
 		whiteNext = !whiteNext

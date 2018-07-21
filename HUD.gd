@@ -1,10 +1,12 @@
 extends Control
 
 signal promoted
-var stateLabel
+signal reset
+onready var stateLabel = $VBoxContainer/Check
 
 func _ready():
-	stateLabel = $VBoxContainer/Check
+	stateLabel.text = "Start"
+	$VBoxContainer/Turn.text = "White's turn"
 
 func turn(white):
 	if white:
@@ -39,3 +41,6 @@ func _on_Bishop_pressed():
 func _on_Knight_pressed():
 	emit_signal("promoted", "n")
 	$PromotionPopup.hide()
+
+func _on_Button_pressed():
+	emit_signal("reset")

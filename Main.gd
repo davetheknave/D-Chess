@@ -18,6 +18,11 @@ func change_turn(white):
 	$HUD.turn(white)
 	state = board.get_state()
 	$HUD.set_state(state)
+	match state:
+		States.GameState.WHITECHECKMATE, \
+		States.GameState.BLACKCHECKMATE, \
+		States.GameState.STALEMATE:
+			get_tree().paused = true
 
 func promote(piece):
 	get_tree().paused = true
@@ -26,3 +31,9 @@ func promote(piece):
 func finish_promotion(piece):
 	get_tree().paused = false
 	board.finish_promotion(piece)
+
+
+func _on_HUD_reset():
+	board.reset()
+	$HUD._ready()
+	get_tree().paused = false

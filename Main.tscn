@@ -180,4 +180,6 @@ _sections_unfolded = [ "Pause" ]
 
 [connection signal="release" from="Board" to="." method="_on_Board_release"]
 
+[connection signal="reset" from="HUD" to="." method="_on_HUD_reset"]
+
 
