@@ -116,15 +116,20 @@ func get_check(white):
 	return false
 
 func check_move(piece, x, y):
-	var result = false
+	var result = true
 	# Temporary swap
 	var oldTarget = squares[y][x]
 	squares[piece.position[1]][piece.position[0]] = null
 	squares[y][x] = piece
 	piece.alice = !piece.alice
 	# Check test
-	if !get_check(piece.white):
-		result = true
+	if get_check(piece.white):
+		result = false
+	if piece.get_name() == "KING":
+		piece.alice = !piece.alice
+		if get_check(piece.white):
+			result = false
+		piece.alice = !piece.alice
 	# Swap back
 	squares[piece.position[1]][piece.position[0]] = piece
 	squares[y][x] = oldTarget
@@ -132,15 +137,14 @@ func check_move(piece, x, y):
 	return result
 
 func has_valid_moves(white):
-	var result = false
 	for row in squares:
 		for piece in row:
 			if piece != null and piece.white == white:
 				var moves = piece.get_moves(self)
 				for move in moves:
 					if check_move(piece, move[0], move[1]):
-						result = true
-	return result
+						return true
+	return false
 
 func promote(piece):
 	emit_signal("promote", piece)
