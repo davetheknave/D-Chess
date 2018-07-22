@@ -104,7 +104,6 @@ func get_state():
 	elif blackCheck: return States.GameState.BLACKCHECK
 	elif turnCount > 100: return States.GameState.STALEMATE
 	else: return States.GameState.NORMAL
-	
 
 func get_check(white):
 	for row in squares:
@@ -117,7 +116,7 @@ func get_check(white):
 						return true
 	return false
 
-func check_move(piece, x, y):
+func check_move(piece, x, y, double=true):
 	var result = true
 	# Temporary swap
 	var oldTarget = squares[y][x]
@@ -125,8 +124,9 @@ func check_move(piece, x, y):
 	squares[y][x] = piece
 	piece.alice = !piece.alice
 	# Check test
-	if get_check(piece.white):
-		result = false
+	if double:
+		if get_check(piece.white):
+			result = false
 	if piece.get_name() == "KING":
 		piece.alice = !piece.alice
 		if get_check(piece.white):
@@ -232,6 +232,15 @@ func try_move(piece, x, y):
 	if not check_move(piece, x, y):
 		moveValid = false
 		print("You cannot move into check!")
+	if piece.get_name() == "KING":
+		if piece.position[0] == (x - 2):
+			if get_check(piece.white) or !check_move(piece, x - 1, y, false) or !check_move(piece, x - 2, y):
+				moveValid = false
+				print("Cannot castle while threatened")
+		if piece.position[0] == (x + 2):
+			if get_check(piece.white) or !check_move(piece, x + 1, y, false) or !check_move(piece, x + 2, y):
+				moveValid = false
+				print("Cannot castle while threatened")
 	if moveValid:
 		move(piece, x, y)
 		whiteNext = !whiteNext
