@@ -11,12 +11,12 @@ config_version=3
 [application]
 
 config/name="D-Chess"
-run/main_scene="res://Main.tscn"
+run/main_scene="res://Game/Main.tscn"
 config/icon="res://icon.png"
 
 [autoload]
 
-States="*res://States.gd"
+States="*res://Game/States.gd"
 
 [rendering]
 

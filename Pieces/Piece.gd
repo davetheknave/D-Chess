@@ -2,12 +2,14 @@ extends Spatial
 
 signal selected(piece)
 export (NodePath) var shape
+export (PackedScene) var flip
 
 var position = null
 var white = true
 var alice = false
 var selected = false
 var board
+const time = false
 
 func get_name():
 	return str(white)
@@ -26,6 +28,7 @@ func set_material(material):
 		get_node(shape).set_surface_material(0, material)
 
 func update_material():
+	print("HI")
 	if white:
 		if alice:
 			if selected:
@@ -80,6 +83,8 @@ func append_move(list, x, y):
 	if !board.bounds(x) or !board.bounds(y): return true
 	var piece = board.get_piece_at(x, y)
 	if piece != null:
+		if piece.time:
+			return false
 		if self.alice != piece.alice:
 			return false
 		if self.white == piece.white:
@@ -88,6 +93,21 @@ func append_move(list, x, y):
 		return true
 	list.append([x, y])
 	return false
+
+func time_flip(turns):
+	var tile = flip.instance()
+	tile.turnsLeft = turns
+	tile.alice = alice
+	tile.white = white
+	tile.position = position
+	tile.selected = false
+	tile.board = board
+	tile.piece = self
+	board.add_child(tile)
+	$Area/CollisionShape.disabled = true
+	board.swap(self, tile)
+	tile.update_material()
+	return tile
 
 func move(x, y):
 	position[0] = x

@@ -32,6 +32,9 @@ func get_moves(board):
 func get_name():
 	return "KING"
 
+func time_flip(turns):
+	return null
+
 func move(x, y):
 	castleA = false
 	castleH = false

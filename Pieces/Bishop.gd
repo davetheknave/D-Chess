@@ -1,6 +1,5 @@
 extends "res://Pieces/Piece.gd"
 
-
 func get_name():
 	return str(white) + "BISHOP"
 
