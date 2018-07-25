@@ -60,10 +60,10 @@ func set_up_board(position):
 				'r': piece = rook.instance()
 			if piece == null:
 				continue
+			piece.init(self, white)
 			add_child(piece)
-			piece.set_white(white)
 			piece.alice = false
-			piece.board = self
+			piece.update_material()
 			piece.connect("selected", self, "piece_clicked")
 			move(piece, j, i)
 			if "moved" in piece:
@@ -102,7 +102,6 @@ func get_state():
 			else: return States.GameState.STALEMATE
 	if whiteCheck: return States.GameState.WHITECHECK
 	elif blackCheck: return States.GameState.BLACKCHECK
-	elif turnCount > 100: return States.GameState.STALEMATE
 	else: return States.GameState.NORMAL
 
 func get_check(white):
@@ -236,11 +235,11 @@ func try_move(piece, x, y):
 		if piece.position[0] == (x - 2):
 			if get_check(piece.white) or !check_move(piece, x - 1, y, false) or !check_move(piece, x - 2, y):
 				moveValid = false
-				print("Cannot castle while threatened")
+				print("Cannot castle while threatened.")
 		if piece.position[0] == (x + 2):
 			if get_check(piece.white) or !check_move(piece, x + 1, y, false) or !check_move(piece, x + 2, y):
 				moveValid = false
-				print("Cannot castle while threatened")
+				print("Cannot castle while threatened.")
 	if moveValid:
 		move(piece, x, y)
 		whiteNext = !whiteNext
@@ -255,9 +254,14 @@ func time_travel(turns):
 			connect("turn", tile, "turn")
 
 func swap(old, new):
-	old.hide()
-	squares[old.position[1]][old.position[0]] = new
-	new.translation = Vector3(origin.x + squareLength * old.position[0], origin.y, origin.z - squareLength * old.position[1])
+	old.deselect()
+	var x = old.position[0]
+	var y = old.position[1]
+	new.translation = Vector3(origin.x + squareLength * x, origin.y, origin.z - squareLength * y)
+	squares[y][x] = new
+	old.deactivate()
+	new.activate()
+	new.update_material()
 
 func get_numbers(pos):
 	var numbers = []
@@ -274,7 +278,7 @@ func get_numbers(pos):
 	numbers[0] = 8 - numbers[0]
 	numbers[1] = 8 - numbers[1]
 	return numbers
-	
+
 func bounds(n):
 	if n < 0 or n > 7:
 		return false

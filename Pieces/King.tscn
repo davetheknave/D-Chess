@@ -8,7 +8,7 @@
 
 extents = Vector3( 0.100422, 0.516759, 0.107044 )
 
-[node name="King" instance=ExtResource( 1 )]
+[node name="King" index="0" instance=ExtResource( 1 )]
 
 script = ExtResource( 2 )
 shape = NodePath("bKing")

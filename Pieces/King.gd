@@ -5,6 +5,10 @@ signal castle(A)
 var castleA = true
 var castleH = true
 
+func init(board, white):
+	self.board = board
+	self.white = white
+
 func get_moves(board):
 	var moveList = []
 	var x = position[0]

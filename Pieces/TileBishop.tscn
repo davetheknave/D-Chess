@@ -37,7 +37,7 @@ surfaces/0 = {
 
 [node name="Piece" instance=ExtResource( 1 )]
 
-shape = NodePath("Cube")
+shape = NodePath("Tile")
 flip = SubResource( 1 )
 
 [node name="CollisionShape" parent="Area" index="0"]

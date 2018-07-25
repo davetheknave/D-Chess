@@ -2,22 +2,34 @@ extends "res://Pieces/Piece.gd"
 
 var turnsLeft = 0
 var piece
+var active
 const time = true
 
 func _ready():
 	pass
 
+func make_flip():
+	pass
+
+func activate():
+	.activate()
+	active = true
+
+func deactivate():
+	.deactivate()
+	active = false
+
 func turn(white):
-	turnsLeft -= 1
+	if active:
+		turnsLeft -= 1
 	print(turnsLeft)
 	if turnsLeft <= 0:
 		time_flip()
-		piece.get_node("Area").get_node("CollisionShape").disabled = false
+		piece.activate()
 
 func time_flip(turns = 0):
-	board.swap(self, piece)
 	piece.show()
-	hide()
+	deactivate()
 	piece.alice = alice
 
 func get_moves(board):

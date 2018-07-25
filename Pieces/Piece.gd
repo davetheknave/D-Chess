@@ -9,6 +9,7 @@ var white = true
 var alice = false
 var selected = false
 var board
+var tile
 const time = false
 
 func get_name():
@@ -17,18 +18,35 @@ func get_name():
 func _ready():
 	pass
 
+func init(board, white):
+	tile = flip.instance()
+	self.board = board
+	self.white = white
+	tile.board = board
+	tile.white = white
+	tile.piece = self
+	board.add_child(tile)
+	tile.deactivate()
+
 func _on_input(camera, event, click_position, click_normal, shape_idx):
 	if event is InputEventMouseButton:
 		if event.pressed:
 			emit_signal("selected", self)
 			select()
 
+func activate():
+	show()
+	$Area/CollisionShape.disabled = false
+
+func deactivate():
+	hide()
+	$Area/CollisionShape.disabled = true
+
 func set_material(material):
 	if shape != null:
 		get_node(shape).set_surface_material(0, material)
 
 func update_material():
-	print("HI")
 	if white:
 		if alice:
 			if selected:
@@ -52,23 +70,12 @@ func update_material():
 			else:
 				set_material(load("res://Pieces/Black.tres"))
 
-func is_white():
-	return white
-
-func set_white(isWhite):
-	white = isWhite
-	update_material()
-
 func get_material():
 	if shape != null:
 		return get_node(shape).get_surface_material(0)
 
 func get_moves(board):
 	return null
-
-func alice():
-	alice = !alice
-	update_material()
 
 func select():
 	selected = true
@@ -95,22 +102,15 @@ func append_move(list, x, y):
 	return false
 
 func time_flip(turns):
-	var tile = flip.instance()
 	tile.turnsLeft = turns
 	tile.alice = alice
-	tile.white = white
 	tile.position = position
-	tile.selected = false
-	tile.board = board
-	tile.piece = self
-	board.add_child(tile)
-	$Area/CollisionShape.disabled = true
 	board.swap(self, tile)
-	tile.update_material()
 	return tile
 
 func move(x, y):
 	position[0] = x
 	position[1] = y
-	alice()
+	alice = !alice
+	update_material()
 	board.enPassant = [-1, -1]
