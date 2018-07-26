@@ -4,7 +4,7 @@
 [ext_resource path="res://Game/Board.tscn" type="PackedScene" id=2]
 [ext_resource path="res://Game/HUD.tscn" type="PackedScene" id=3]
 
-[node name="Main" type="Node"]
+[node name="Main" type="Spatial" index="0"]
 
 script = ExtResource( 1 )
 
@@ -34,7 +34,22 @@ _sections_unfolded = [ "Transform" ]
 pause_mode = 2
 _sections_unfolded = [ "Pause", "Size Flags" ]
 
-[connection signal="release" from="Board" to="." method="_on_Board_release"]
+[node name="Timer" type="Timer" parent="." index="3"]
+
+process_mode = 1
+wait_time = 0.25
+one_shot = true
+autostart = false
+
+[connection signal="promote" from="Board" to="." method="promote"]
+
+[connection signal="release" from="Board" to="." method="release"]
+
+[connection signal="select" from="Board" to="." method="select"]
+
+[connection signal="turn" from="Board" to="." method="change_turn"]
+
+[connection signal="promoted" from="HUD" to="." method="finish_promotion"]
 
 [connection signal="reset" from="HUD" to="." method="_on_HUD_reset"]
 

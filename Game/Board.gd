@@ -9,6 +9,7 @@ export (PackedScene) var knight
 
 signal promote(piece)
 signal turn(white)
+signal select(piece)
 
 const squareLength = 0.5
 const origin = Vector3(-0.99, 0.5, -0.4)
@@ -85,6 +86,7 @@ func set_up_board(position):
 
 func piece_clicked(piece):
 	currentPiece = piece
+	emit_signal("select", piece)
 	deselect_all()
 
 func get_state():
@@ -177,7 +179,7 @@ func deselect_all():
 func attach_square(square, white):
 	square.create_convex_collision()
 	var body = square.get_node(square.name+"_col")
-	body.connect("input_event", self, "mouse_over", [square, white], CONNECT_DEFERRED)
+	body.collision_layer = 2
 
 func get_piece_at(x, y):
 	if !bounds(x) or !bounds(y):
@@ -202,6 +204,9 @@ func move(piece, x, y):
 		turnCount = 0
 	turnCount += 1
 	# Update board model
+	place(piece, piece.position[0], piece.position[1])
+	
+func place(piece, x, y):
 	piece.translation = Vector3(origin.x + squareLength * x, origin.y, origin.z - squareLength * y)
 
 func enPassant():
@@ -213,14 +218,10 @@ func enPassant():
 			squares[3][enPassant[0]].queue_free()
 			squares[3][enPassant[0]] = null
 
-func mouse_over(camera, event, click_position, click_normal, shape_idx, pos, white):
-	if event is InputEventMouseButton:
-		if !event.pressed:
-			if currentPiece != null:
-				var truePosition = get_numbers(pos.name)
-				try_move(currentPiece, truePosition[0], truePosition[1])
-
-func try_move(piece, x, y):
+func try_move(piece, pos):
+	var truePos = get_numbers(pos.name)
+	var x = truePos[0]
+	var y = truePos[1]
 	var moveValid = true
 	if (piece.white and !whiteNext) or (!piece.white and whiteNext):
 		print("It's not your turn, yet!")
@@ -246,7 +247,9 @@ func try_move(piece, x, y):
 		emit_signal("turn", whiteNext)
 
 func time_travel(turns):
+	print("Hello")
 	if currentPiece != null and currentPiece.white == whiteNext:
+		print("Hi")
 		var tile = currentPiece.time_flip(turns)
 		if tile != null:
 			whiteNext = !whiteNext
@@ -257,7 +260,7 @@ func swap(old, new):
 	old.deselect()
 	var x = old.position[0]
 	var y = old.position[1]
-	new.translation = Vector3(origin.x + squareLength * x, origin.y, origin.z - squareLength * y)
+	place(old, x, y)
 	squares[y][x] = new
 	old.deactivate()
 	new.activate()
