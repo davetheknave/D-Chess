@@ -186,6 +186,12 @@ func get_piece_at(x, y):
 		return null
 	return squares[y][x]
 
+func get_piece_on(square):
+	var truePos = get_numbers(square.name)
+	var x = truePos[0]
+	var y = truePos[1]
+	return get_piece_at(x, y)
+
 func move(piece, x, y):
 	if piece.position != null:
 		# Capture any pieces

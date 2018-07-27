@@ -36,28 +36,41 @@ func _on_HUD_time(turns):
 	board.time_travel(turns)
 
 func select(piece):
-	selected = piece
-	$Timer.start()
+	if piece.white == board.whiteNext:
+		selected = piece
+		piece.select()
 
 const rayLength = 5000
 
 func _input(event):
-	if event is InputEventMouseButton:
-		if not event.pressed:
-			if $Timer.time_left == 0:
+	if selected != null:
+		if event is InputEventMouseButton:
+			if not event.pressed and $Timer.time_left == 0:
 				var result = pick(event, false)
 				if not result.empty():
-					board.try_move(board.currentPiece, result.collider)
-				if selected != null:
-					release(selected)
-		else:
-			release(selected)
-	if event is InputEventMouseMotion and selected != null:
-		var result = pick(event, false)
-		if not result.empty():
-			var basis = Basis(Vector3(.92,0,0),Vector3(0,.92,0),Vector3(0,0,.92))
-			var difference = Transform(basis, Vector3(result.position[0], 0.1, result.position[2]))
-			selected.set_global_transform(difference)
+					var piece = board.get_piece_on(result.collider)
+					print(result.collider.name)
+					if piece != null and piece == selected:
+						release(selected)
+					elif piece != null and piece.white == board.whiteNext:
+						release(selected)
+						select(piece)
+					else:
+						board.try_move(selected, result.collider)
+						release(selected)
+		elif event is InputEventMouseMotion:
+			var result = pick(event, false)
+			if not result.empty():
+				var basis = Basis(Vector3(.92,0,0),Vector3(0,.92,0),Vector3(0,0,.92))
+				var mousePos = Transform(basis, Vector3(result.position[0], 0.1, result.position[2]))
+				selected.set_global_transform(mousePos)
+	else:
+		if event is InputEventMouseButton:
+			if event.pressed:
+				var result = pick(event, true)
+				if not result.empty():
+					$Timer.start()
+					select(result.collider.get_parent())
 
 func pick(event, pieces):
 	var camera = $Camera
@@ -75,3 +88,4 @@ func release(name):
 	if name != null:
 		board.place(name, name.position[0], name.position[1])
 		selected = null
+	board.deselect_all()

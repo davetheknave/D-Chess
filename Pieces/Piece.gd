@@ -29,10 +29,11 @@ func init(board, white):
 	tile.deactivate()
 
 func _on_input(camera, event, click_position, click_normal, shape_idx):
-	if event is InputEventMouseButton:
-		if event.pressed:
-			emit_signal("selected", self)
-			select()
+	pass
+#	if event is InputEventMouseButton:
+#		if event.pressed:
+#			emit_signal("selected", self)
+#			select()
 
 func activate():
 	show()
