@@ -43,6 +43,4 @@ shape = SubResource( 1 )
 disabled = false
 _sections_unfolded = [ "Transform" ]
 
-[connection signal="input_event" from="Area" to="." method="_on_input"]
-
 

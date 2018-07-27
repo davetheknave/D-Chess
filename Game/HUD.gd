@@ -2,10 +2,9 @@ extends Control
 
 signal promoted
 signal reset
-signal time(turns)
 onready var stateLabel = $HBoxContainer/VBoxContainer/Check
 onready var turnText = $HBoxContainer/VBoxContainer/Turn
-var time = 0
+var time = 1
 
 func _ready():
 	stateLabel.text = "Start"
@@ -29,7 +28,7 @@ func set_state(state):
 
 func reset_time():
 	$HBoxContainer/TimeControls/Move1.pressed = true
-	time = 0
+	time = 1
 
 func promote():
 	$PromotionPopup.show()
@@ -56,4 +55,3 @@ func _on_Button_pressed():
 
 func _on_TimeControls_change(turns):
 	time = turns
-	emit_signal("time", turns)

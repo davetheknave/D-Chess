@@ -5,7 +5,6 @@ var pos
 var promoted
 var state
 var selected
-var time
 
 func _ready():
 	pass

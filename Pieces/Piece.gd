@@ -28,13 +28,6 @@ func init(board, white):
 	board.add_child(tile)
 	tile.deactivate()
 
-func _on_input(camera, event, click_position, click_normal, shape_idx):
-	pass
-#	if event is InputEventMouseButton:
-#		if event.pressed:
-#			emit_signal("selected", self)
-#			select()
-
 func activate():
 	show()
 	$Area/CollisionShape.disabled = false
