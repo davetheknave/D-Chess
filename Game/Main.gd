@@ -7,7 +7,7 @@ var state
 var selected
 
 func _ready():
-	pass
+	$AnimationPlayer.seek(0, true)
 
 func change_turn(white):
 	$HUD.turn(white)
@@ -18,6 +18,11 @@ func change_turn(white):
 		States.GameState.BLACKCHECKMATE, \
 		States.GameState.STALEMATE:
 			get_tree().paused = true
+			return
+	if board.whiteNext:
+		$AnimationPlayer.play_backwards("Rotate")
+	else:
+		$AnimationPlayer.play("Rotate")
 
 func promote(promoted):
 	get_tree().paused = true
@@ -69,7 +74,7 @@ func _input(event):
 					select(result.collider.get_parent())
 
 func pick(event, pieces):
-	var camera = $Camera
+	var camera = $Board/Position3D/Camera
 	var from = camera.project_ray_origin(event.position)
 	var to = from + camera.project_ray_normal(event.position) * rayLength
 	var space_state = get_world().direct_space_state

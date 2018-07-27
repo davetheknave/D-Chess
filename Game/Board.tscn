@@ -1232,7 +1232,7 @@ surfaces/0 = {
 }
 _sections_unfolded = [ "surface_1" ]
 
-[node name="Board" type="Spatial"]
+[node name="Board" type="Spatial" index="0"]
 
 script = ExtResource( 1 )
 king = ExtResource( 2 )
@@ -2276,21 +2276,5 @@ mesh = SubResource( 64 )
 skeleton = NodePath("..")
 material/0 = null
 _sections_unfolded = [ "material" ]
-
-[node name="Camera" type="Camera" parent="." index="3"]
-
-transform = Transform( 1, 0, 0, 0, 0.992436, 0.122759, 0, -0.122759, 0.992436, 0, 2.18938, 5.9664 )
-keep_aspect = 1
-cull_mask = 1048575
-environment = null
-h_offset = 0.0
-v_offset = 0.0
-doppler_tracking = 0
-projection = 0
-current = false
-fov = 70.0
-size = 1.0
-near = 0.05
-far = 100.0
 
 

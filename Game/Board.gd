@@ -12,7 +12,7 @@ signal turn(white)
 signal select(piece)
 
 const squareLength = 0.5
-const origin = Vector3(-0.99, 0.5, -0.4)
+const origin = Vector3(-0.99, 0.5, -0.445)
 const START_POSITION = ["rnbqkbnr","pppppppp","11111111","11111111","11111111","11111111","PPPPPPPP","RNBQKBNR"]
 
 var squares
