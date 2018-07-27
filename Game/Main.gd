@@ -5,6 +5,7 @@ var pos
 var promoted
 var state
 var selected
+var time
 
 func _ready():
 	pass
@@ -32,9 +33,6 @@ func _on_HUD_reset():
 	$HUD._ready()
 	get_tree().paused = false
 
-func _on_HUD_time(turns):
-	board.time_travel(turns)
-
 func select(piece):
 	if piece.white == board.whiteNext:
 		selected = piece
@@ -49,14 +47,13 @@ func _input(event):
 				var result = pick(event, false)
 				if not result.empty():
 					var piece = board.get_piece_on(result.collider)
-					print(result.collider.name)
 					if piece != null and piece == selected:
 						release(selected)
 					elif piece != null and piece.white == board.whiteNext:
 						release(selected)
 						select(piece)
 					else:
-						board.try_move(selected, result.collider)
+						board.try_move(selected, result.collider, $HUD.time)
 						release(selected)
 		elif event is InputEventMouseMotion:
 			var result = pick(event, false)

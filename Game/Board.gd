@@ -221,7 +221,7 @@ func enPassant():
 			squares[3][enPassant[0]].queue_free()
 			squares[3][enPassant[0]] = null
 
-func try_move(piece, pos):
+func try_move(piece, pos, turns):
 	var truePos = get_numbers(pos.name)
 	var x = truePos[0]
 	var y = truePos[1]
@@ -247,15 +247,14 @@ func try_move(piece, pos):
 	if moveValid:
 		move(piece, x, y)
 		whiteNext = !whiteNext
+		if turns > 0:
+			time_travel(piece, turns)
 		emit_signal("turn", whiteNext)
 
-func time_travel(turns):
-	if currentPiece != null and currentPiece.white == whiteNext:
-		var tile = currentPiece.time_flip(turns)
-		if tile != null:
-			whiteNext = !whiteNext
-			emit_signal("turn", whiteNext)
-			connect("turn", tile, "turn")
+func time_travel(piece, turns):
+	var tile = piece.time_flip(turns)
+	if tile != null:
+		connect("turn", tile, "turn")
 
 func swap(old, new):
 	old.deselect()

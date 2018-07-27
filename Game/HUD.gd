@@ -5,6 +5,7 @@ signal reset
 signal time(turns)
 onready var stateLabel = $HBoxContainer/VBoxContainer/Check
 onready var turnText = $HBoxContainer/VBoxContainer/Turn
+var time = 0
 
 func _ready():
 	stateLabel.text = "Start"
@@ -15,6 +16,7 @@ func turn(white):
 		turnText.text = "White's turn"
 	else:
 		turnText.text = "Black's turn"
+	reset_time()
 
 func set_state(state):
 	match state:
@@ -24,6 +26,10 @@ func set_state(state):
 		States.GameState.BLACKCHECKMATE: stateLabel.text = "White has won!"
 		States.GameState.WHITECHECKMATE: stateLabel.text = "Black has won!"
 		States.GameState.STALEMATE: stateLabel.text = "Stalemate"
+
+func reset_time():
+	$HBoxContainer/TimeControls/Move1.pressed = true
+	time = 0
 
 func promote():
 	$PromotionPopup.show()
@@ -49,4 +55,5 @@ func _on_Button_pressed():
 
 
 func _on_TimeControls_change(turns):
+	time = turns
 	emit_signal("time", turns)
