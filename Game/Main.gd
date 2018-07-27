@@ -51,8 +51,7 @@ func _input(event):
 				if selected != null:
 					release(selected)
 		else:
-			if $Timer.time_left == 0:
-				release(selected)
+			release(selected)
 	if event is InputEventMouseMotion and selected != null:
 		var result = pick(event, false)
 		if not result.empty():

@@ -206,9 +206,6 @@ func move(piece, x, y):
 	# Update board model
 	place(piece, piece.position[0], piece.position[1])
 	
-func place(piece, x, y):
-	piece.translation = Vector3(origin.x + squareLength * x, origin.y, origin.z - squareLength * y)
-
 func enPassant():
 	if squares[enPassant[1]][enPassant[0]] == null:
 		if enPassant[1] == 5 and squares[4][enPassant[0]].alice == currentPiece.alice:
@@ -247,9 +244,7 @@ func try_move(piece, pos):
 		emit_signal("turn", whiteNext)
 
 func time_travel(turns):
-	print("Hello")
 	if currentPiece != null and currentPiece.white == whiteNext:
-		print("Hi")
 		var tile = currentPiece.time_flip(turns)
 		if tile != null:
 			whiteNext = !whiteNext
@@ -260,11 +255,18 @@ func swap(old, new):
 	old.deselect()
 	var x = old.position[0]
 	var y = old.position[1]
-	place(old, x, y)
+	new.global_transform = old.global_transform
 	squares[y][x] = new
 	old.deactivate()
+	if is_connected("turn", old, "turn"):
+		disconnect("turn", old, "turn")
+	if is_connected("turn", new, "turn"):
+		disconnect("turn", new, "turn")
 	new.activate()
 	new.update_material()
+
+func place(piece, x, y):
+	piece.translation = Vector3(origin.x + squareLength * x, origin.y, origin.z - squareLength * y)
 
 func get_numbers(pos):
 	var numbers = []
