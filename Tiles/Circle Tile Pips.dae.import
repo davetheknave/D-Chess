@@ -7,10 +7,7 @@ path="res://.import/Circle Tile Pips.dae-22384bd161dc08ed71aa635b786ad21d.scn"
 [deps]
 
 source_file="res://Tiles/Circle Tile Pips.dae"
-source_md5="7aa2cfccae30cb316cf166c62c6cc5a0"
-
 dest_files=[ "res://.import/Circle Tile Pips.dae-22384bd161dc08ed71aa635b786ad21d.scn" ]
-dest_md5="f3e363935489cb847413520eae33ca30"
 
 [params]
 

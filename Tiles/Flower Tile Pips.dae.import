@@ -7,10 +7,7 @@ path="res://.import/Flower Tile Pips.dae-e3bd638edd82e8105789223f4c623ae6.scn"
 [deps]
 
 source_file="res://Tiles/Flower Tile Pips.dae"
-source_md5="7aa7b07cf54fa768caef0019119e335e"
-
 dest_files=[ "res://.import/Flower Tile Pips.dae-e3bd638edd82e8105789223f4c623ae6.scn" ]
-dest_md5="2e5e7bd69a512aa6e67bc722286ef4ee"
 
 [params]
 

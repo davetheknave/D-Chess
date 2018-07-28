@@ -4,13 +4,13 @@
 [ext_resource path="res://Pieces/Queen.gd" type="Script" id=2]
 [ext_resource path="res://Pieces/TileQueen.tscn" type="PackedScene" id=3]
 [ext_resource path="res://Models/bQueen.scn" type="PackedScene" id=4]
-[ext_resource path="res://Pieces/White.tres" type="Material" id=5]
+[ext_resource path="res://Colors/White.tres" type="Material" id=5]
 
 [sub_resource type="BoxShape" id=1]
 
 extents = Vector3( 0.11299, 0.487898, 0.100443 )
 
-[node name="Queen" instance=ExtResource( 1 )]
+[node name="Queen" index="0" instance=ExtResource( 1 )]
 
 script = ExtResource( 2 )
 shape = NodePath("bQueen")

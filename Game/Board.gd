@@ -10,18 +10,20 @@ export (PackedScene) var knight
 signal promote(piece)
 signal turn(white)
 signal select(piece)
+signal release(name)
 
 const squareLength = 0.5
-const origin = Vector3(-0.99, 0.5, -0.445)
+const origin = Vector3(-0.99, 0.43, -0.445)
 const START_POSITION = ["rnbqkbnr","pppppppp","11111111","11111111","11111111","11111111","PPPPPPPP","RNBQKBNR"]
 
-var squares
-var currentPiece
-var whiteNext
-var enPassant
+var squares  # A representation of the board
+var currentPiece  # A currently selected piece
+var whiteNext  # Is it white's turn?
+var enPassant  # If a piece moves 2 spaces, this keeps track of the en passant position
 var turnCount = 0
 
-signal release(name)
+
+# Getting ready
 
 func _ready():
 	for i in $White.get_children():
@@ -35,24 +37,21 @@ func reset():
 		for i in squares:
 			for j in i:
 				if j != null:
-					j.queue_free()
+					j.delete()
 	squares = []
 	whiteNext = true
 	enPassant = [-1,-1]
 	currentPiece = null
-	set_up_board(START_POSITION)
-
-func set_up_board(position):
 	for i in 8:
 		squares.append([null,null,null,null,null,null,null,null])
 		for j in 8:
 			var white
 			var piece
-			if position[i][j].to_lower() == position[i][j]:
+			if START_POSITION[i][j].to_lower() == START_POSITION[i][j]:
 				white = true
 			else:
 				white = false
-			match position[i][j].to_lower():
+			match START_POSITION[i][j].to_lower():
 				'k': piece = king.instance()
 				'q': piece = queen.instance()
 				'n': piece = knight.instance()
@@ -84,10 +83,88 @@ func set_up_board(position):
 	bKing.connect("castle", bRookA, "castle")
 	bKing.connect("castle", bRookH, "castle")
 
-func piece_clicked(piece):
-	currentPiece = piece
-	emit_signal("select", piece)
-	deselect_all()
+func attach_square(square, white):
+	square.create_convex_collision()
+	var body = square.get_node(square.name+"_col")
+	body.collision_layer = 2
+
+
+# Piece Moving
+
+func move(piece, x, y):
+	if piece.position != null:
+		# Capture any pieces
+		if squares[y][x] != null:
+			squares[y][x].queue_free()
+			turnCount = 0
+		# Update board array
+		squares[piece.position[1]][piece.position[0]] = null
+		# Tell piece to move, and do anything else
+		piece.move(x, y)
+	else:
+		piece.position = [x, y]
+	squares[y][x] = piece
+	# Update turn count
+	if piece.name == "Pawn":
+		turnCount = 0
+	turnCount += 1
+	# Update board model
+	place(piece, piece.position[0], piece.position[1])
+
+func try_move(piece, pos, turns):
+	turnsMove = turns
+	var truePos = get_numbers(pos.name)
+	var x = truePos[0]
+	var y = truePos[1]
+	var moveValid = true
+	if (piece.white and !whiteNext) or (!piece.white and whiteNext):
+		print("It's not your turn, yet!")
+		moveValid = false
+	if not [x, y] in piece.get_moves(self):
+		moveValid = false
+		print("That piece doesn't move that way!")
+	if not check_move(piece, x, y):
+		moveValid = false
+		print("You cannot move into check!")
+	if piece.name == "King":
+		if piece.position[0] == (x - 2):
+			var checknow = get_check(piece.white)
+			var checkone = !check_move(piece, x - 1, y, false)
+			var checktwo = !check_move(piece, x, y)
+			if checknow or checkone or checktwo:
+				moveValid = false
+				print("Cannot castle while threatened.")
+		if piece.position[0] == (x + 2):
+			if get_check(piece.white) or !check_move(piece, x + 1, y, false) or !check_move(piece, x, y):
+				moveValid = false
+				print("Cannot castle while threatened.")
+	if moveValid:
+		move(piece, x, y)
+		whiteNext = !whiteNext
+		if turns > 1:
+			time_travel(piece, turns)
+		emit_signal("turn", whiteNext)
+	turnsMove = -1
+
+func swap(old, new):
+	old.deselect()
+	var x = old.position[0]
+	var y = old.position[1]
+	new.global_transform = old.global_transform
+	squares[y][x] = new
+	old.deactivate()
+	if is_connected("turn", old, "turn"):
+		disconnect("turn", old, "turn")
+	if is_connected("turn", new, "turn"):
+		disconnect("turn", new, "turn")
+	new.activate()
+	new.update_material()
+
+func place(piece, x, y):
+	piece.translation = Vector3(origin.x + squareLength * x, origin.y, origin.z - squareLength * y)
+
+
+# Evaluation
 
 func get_state():
 	var whiteCheck = get_check(true)
@@ -113,11 +190,11 @@ func get_check(white):
 				var moves = piece.get_moves(self)
 				for move in moves:
 					var pieceAtMove = get_piece_at(move[0], move[1])
-					if pieceAtMove != null and pieceAtMove.get_name() == "KING" and pieceAtMove.white == white:
+					if pieceAtMove != null and pieceAtMove.name == "King":
 						return true
 	return false
 
-func check_move(piece, x, y, double=true):
+func check_move(piece, x, y, alice=true, normal=true):
 	var result = true
 	# Temporary swap
 	var oldTarget = squares[y][x]
@@ -125,10 +202,10 @@ func check_move(piece, x, y, double=true):
 	squares[y][x] = piece
 	piece.alice = !piece.alice
 	# Check test
-	if double:
+	if alice:
 		if get_check(piece.white):
 			result = false
-	if piece.get_name() == "KING":
+	if normal and piece.name == "King":
 		piece.alice = !piece.alice
 		if get_check(piece.white):
 			result = false
@@ -148,6 +225,9 @@ func has_valid_moves(white):
 					if check_move(piece, move[0], move[1]):
 						return true
 	return false
+
+
+# Special Rules
 
 func promote(piece):
 	emit_signal("promote", piece)
@@ -169,6 +249,30 @@ func finish_promotion(newPiece):
 	squares[y][x] = piece
 	currentPiece.queue_free()
 
+func enPassant():
+	if squares[enPassant[1]][enPassant[0]] == null:
+		if enPassant[1] == 5 and squares[4][enPassant[0]].alice == currentPiece.alice:
+			squares[4][enPassant[0]].queue_free()
+			squares[4][enPassant[0]] = null
+		if enPassant[1] == 2 and squares[3][enPassant[0]].alice == currentPiece.alice:
+			squares[3][enPassant[0]].queue_free()
+			squares[3][enPassant[0]] = null
+var turnsMove = -1
+
+func time_travel(piece, turns):
+#	var tile = piece.time_flip(turns)
+	var tile = piece.other
+	if tile == null:
+		return
+	tile.turnsLeft = turns
+	tile.alice = piece.alice
+	tile.position = piece.position
+	swap(piece, tile)
+	connect("turn", tile, "turn")
+
+
+# Cosmetic
+
 func deselect_all():
 	for i in squares:
 		for j in i:
@@ -176,10 +280,13 @@ func deselect_all():
 				continue
 			j.deselect()
 
-func attach_square(square, white):
-	square.create_convex_collision()
-	var body = square.get_node(square.name+"_col")
-	body.collision_layer = 2
+
+# Fetching
+
+func piece_clicked(piece):
+	currentPiece = piece
+	emit_signal("select", piece)
+	deselect_all()
 
 func get_piece_at(x, y):
 	if !bounds(x) or !bounds(y):
@@ -192,89 +299,8 @@ func get_piece_on(square):
 	var y = truePos[1]
 	return get_piece_at(x, y)
 
-func move(piece, x, y):
-	if piece.position != null:
-		# Capture any pieces
-		if squares[y][x] != null:
-			squares[y][x].queue_free()
-			turnCount = 0
-		# Update board array
-		squares[piece.position[1]][piece.position[0]] = null
-		# Tell piece to move, and do anything else
-		piece.move(x, y)
-	else:
-		piece.position = [x, y]
-	squares[y][x] = piece
-	# Update turn count
-	if piece.get_name() == "PAWN":
-		turnCount = 0
-	turnCount += 1
-	# Update board model
-	place(piece, piece.position[0], piece.position[1])
-	
-func enPassant():
-	if squares[enPassant[1]][enPassant[0]] == null:
-		if enPassant[1] == 5 and squares[4][enPassant[0]].alice == currentPiece.alice:
-			squares[4][enPassant[0]].queue_free()
-			squares[4][enPassant[0]] = null
-		if enPassant[1] == 2 and squares[3][enPassant[0]].alice == currentPiece.alice:
-			squares[3][enPassant[0]].queue_free()
-			squares[3][enPassant[0]] = null
-var turnsMove = -1
 
-func try_move(piece, pos, turns):
-	turnsMove = turns
-	var truePos = get_numbers(pos.name)
-	var x = truePos[0]
-	var y = truePos[1]
-	var moveValid = true
-	if (piece.white and !whiteNext) or (!piece.white and whiteNext):
-		print("It's not your turn, yet!")
-		moveValid = false
-	if not [x, y] in piece.get_moves(self):
-		moveValid = false
-		print("That piece doesn't move that way!")
-	if not check_move(piece, x, y):
-		moveValid = false
-		print("You cannot move into check!")
-	if piece.get_name() == "KING":
-		if piece.position[0] == (x - 2):
-			if get_check(piece.white) or !check_move(piece, x - 1, y, false) or !check_move(piece, x - 2, y):
-				moveValid = false
-				print("Cannot castle while threatened.")
-		if piece.position[0] == (x + 2):
-			if get_check(piece.white) or !check_move(piece, x + 1, y, false) or !check_move(piece, x + 2, y):
-				moveValid = false
-				print("Cannot castle while threatened.")
-	if moveValid:
-		move(piece, x, y)
-		whiteNext = !whiteNext
-		if turns > 0:
-			time_travel(piece, turns)
-		emit_signal("turn", whiteNext)
-	turnsMove = -1
-
-func time_travel(piece, turns):
-	var tile = piece.time_flip(turns)
-	if tile != null:
-		connect("turn", tile, "turn")
-
-func swap(old, new):
-	old.deselect()
-	var x = old.position[0]
-	var y = old.position[1]
-	new.global_transform = old.global_transform
-	squares[y][x] = new
-	old.deactivate()
-	if is_connected("turn", old, "turn"):
-		disconnect("turn", old, "turn")
-	if is_connected("turn", new, "turn"):
-		disconnect("turn", new, "turn")
-	new.activate()
-	new.update_material()
-
-func place(piece, x, y):
-	piece.translation = Vector3(origin.x + squareLength * x, origin.y, origin.z - squareLength * y)
+# Other
 
 func get_numbers(pos):
 	var numbers = []

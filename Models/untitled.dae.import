@@ -7,10 +7,7 @@ path="res://.import/untitled.dae-79ca75157721a65e8a82fe97174805b0.scn"
 [deps]
 
 source_file="res://Models/untitled.dae"
-source_md5="d3a377db54873fa92a3aa34363e09de9"
-
 dest_files=[ "res://.import/untitled.dae-79ca75157721a65e8a82fe97174805b0.scn" ]
-dest_md5="3b15590c468ad8affec0cc3f7f65c2d9"
 
 [params]
 

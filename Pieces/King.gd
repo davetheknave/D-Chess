@@ -33,9 +33,6 @@ func get_moves(board):
 		append_move(moveList, x + 2, y)
 	return moveList
 
-func get_name():
-	return "KING"
-
 func time_flip(turns):
 	return null
 

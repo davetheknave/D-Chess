@@ -7,10 +7,7 @@ path="res://.import/chess.obj-e9d21207dd78bed2bb019ade6d26b23a.scn"
 [deps]
 
 source_file="res://Models/chess.obj"
-source_md5="c37aab20ac0d577d65ab7dc104130ce0"
-
 dest_files=[ "res://.import/chess.obj-e9d21207dd78bed2bb019ade6d26b23a.scn" ]
-dest_md5="c0bd40ef4abde768bdfc55c4e6a38756"
 
 [params]
 

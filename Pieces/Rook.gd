@@ -4,9 +4,6 @@ signal move(A)
 
 var moved = false
 
-func get_name():
-	return str(white) + "ROOK"
-
 func get_moves(board):
 	var moveList = []
 	var x = position[0]

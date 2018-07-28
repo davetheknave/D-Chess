@@ -1,8 +1,5 @@
 extends "res://Pieces/Piece.gd"
 
-func get_name():
-	return str(white) + "QUEEN"
-
 func get_moves(board):
 	var moveList = []
 	var x = position[0]

@@ -7,10 +7,7 @@ path="res://.import/Circle Tile.dae-66e301b94fc379774351535176924521.scn"
 [deps]
 
 source_file="res://Tiles/Circle Tile.dae"
-source_md5="585c5f020c8bb032c02e2086253c563e"
-
 dest_files=[ "res://.import/Circle Tile.dae-66e301b94fc379774351535176924521.scn" ]
-dest_md5="00e247f1d9cef122d10b2b871dcdd1cb"
 
 [params]
 

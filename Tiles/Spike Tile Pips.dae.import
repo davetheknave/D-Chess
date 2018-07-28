@@ -7,10 +7,7 @@ path="res://.import/Spike Tile Pips.dae-381c0523211622b3df88e23f09e0ae84.scn"
 [deps]
 
 source_file="res://Tiles/Spike Tile Pips.dae"
-source_md5="a8b9fdcdd867505abf2d32dafa4a6965"
-
 dest_files=[ "res://.import/Spike Tile Pips.dae-381c0523211622b3df88e23f09e0ae84.scn" ]
-dest_md5="8ecff3ed5789a942232a168da04232c2"
 
 [params]
 

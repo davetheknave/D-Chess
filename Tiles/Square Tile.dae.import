@@ -7,10 +7,7 @@ path="res://.import/Square Tile.dae-3ad993d04cd1d3d908ca0d529027eb21.scn"
 [deps]
 
 source_file="res://Tiles/Square Tile.dae"
-source_md5="f298627dd233950964b9b16d3d73ba63"
-
 dest_files=[ "res://.import/Square Tile.dae-3ad993d04cd1d3d908ca0d529027eb21.scn" ]
-dest_md5="2d22ae8d16dc9b0ee64471aff3624dac"
 
 [params]
 

@@ -4,29 +4,42 @@ signal selected(piece)
 export (NodePath) var shape
 export (PackedScene) var flip
 
+const time = false
+
 var position = null
 var white = true
 var alice = false
 var selected = false
 var board
-var tile
-const time = false
-
-func get_name():
-	return str(white)
+var other
 
 func _ready():
 	pass
 
+func delete():
+	if other != null:
+		other.queue_free()
+	queue_free()
+
+func get_name():
+	var string = ""
+	if white:
+		string += "White"
+	else:
+		string += "Black"
+	if alice:
+		string += " Alice "
+	return string + name
+
 func init(board, white):
-	tile = flip.instance()
+	other = flip.instance()
 	self.board = board
+	other.board = board
+	other.white = white
 	self.white = white
-	tile.board = board
-	tile.white = white
-	tile.piece = self
-	board.add_child(tile)
-	tile.deactivate()
+	other.other = self
+	board.add_child(other)
+	other.deactivate()
 
 func activate():
 	show()
@@ -44,29 +57,25 @@ func update_material():
 	if white:
 		if alice:
 			if selected:
-				set_material(load("res://Pieces/WhiteAliceHighlight.tres"))
+				set_material(load("res://Colors/WhiteAliceHighlight.tres"))
 			else:
-				set_material(load("res://Pieces/WhiteAlice.tres"))
+				set_material(load("res://Colors/WhiteAlice.tres"))
 		else:
 			if selected:
-				set_material(load("res://Pieces/WhiteHighlight.tres"))
+				set_material(load("res://Colors/WhiteHighlight.tres"))
 			else:
-				set_material(load("res://Pieces/White.tres"))
+				set_material(load("res://Colors/White.tres"))
 	else:
 		if alice:
 			if selected:
-				set_material(load("res://Pieces/BlackAliceHighlight.tres"))
+				set_material(load("res://Colors/BlackAliceHighlight.tres"))
 			else:
-				set_material(load("res://Pieces/BlackAlice.tres"))
+				set_material(load("res://Colors/BlackAlice.tres"))
 		else:
 			if selected:
-				set_material(load("res://Pieces/BlackHighlight.tres"))
+				set_material(load("res://Colors/BlackHighlight.tres"))
 			else:
-				set_material(load("res://Pieces/Black.tres"))
-
-func get_material():
-	if shape != null:
-		return get_node(shape).get_surface_material(0)
+				set_material(load("res://Colors/Black.tres"))
 
 func get_moves(board):
 	return null
@@ -95,12 +104,17 @@ func append_move(list, x, y):
 	list.append([x, y])
 	return false
 
-func time_flip(turns):
-	tile.turnsLeft = turns
-	tile.alice = alice
-	tile.position = position
-	board.swap(self, tile)
-	return tile
+func time_flip(turns = 0):
+	other.activate()
+	other.turnsLeft = turns
+	other.alice = alice
+	other.position = position
+	board.swap(self, other)
+	deactivate()
+	return other
+	
+func turn():
+	pass
 
 func move(x, y):
 	position[0] = x

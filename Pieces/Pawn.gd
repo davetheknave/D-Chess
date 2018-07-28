@@ -67,6 +67,3 @@ func move(x, y):
 	if oldY + 2 == y:  # White double move
 		board.enPassant[0] = x
 		board.enPassant[1] = y - 1
-
-func get_name():
-	return str(white) + "PAWN"

@@ -7,10 +7,7 @@ path="res://.import/L Tile.dae-b0876e665a91c3d16ea96008ff832886.scn"
 [deps]
 
 source_file="res://Tiles/L Tile.dae"
-source_md5="61ad77b41e7c1d98941ed3e0f8d87ad0"
-
 dest_files=[ "res://.import/L Tile.dae-b0876e665a91c3d16ea96008ff832886.scn" ]
-dest_md5="724fec9cdc55569667765e1232e600a2"
 
 [params]
 

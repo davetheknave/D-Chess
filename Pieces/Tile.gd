@@ -1,39 +1,32 @@
 extends "res://Pieces/Piece.gd"
 
-var turnsLeft = 0
-var piece
-var active
 const time = true
+
+var turnsLeft = 0
+var active
 
 func _ready():
 	shape = get_node(shape)
 
-func make_flip():
-	pass
-
 func activate():
 	.activate()
 	active = true
-#	shape.change_number(turnsLeft)
 
 func deactivate():
 	.deactivate()
 	active = false
 
-func get_material():
-	pass
-
 func set_material():
 	pass
 
-var blackN = load("res://Pieces/Black.tres")
-var whiteN = load("res://Pieces/White.tres")
-var whiteA = load("res://Pieces/WhiteAlice.tres")
-var blackA = load("res://Pieces/BlackAlice.tres")
-var whiteH = load("res://Pieces/WhiteHighlight.tres")
-var blackH = load("res://Pieces/BlackHighlight.tres")
-var whiteAH = load("res://Pieces/WhiteAliceHighlight.tres")
-var blackAH = load("res://Pieces/BlackAliceHighlight.tres")
+var blackN = load("res://Colors/Black.tres")
+var whiteN = load("res://Colors/White.tres")
+var whiteA = load("res://Colors/WhiteAlice.tres")
+var blackA = load("res://Colors/BlackAlice.tres")
+var whiteH = load("res://Colors/WhiteHighlight.tres")
+var blackH = load("res://Colors/BlackHighlight.tres")
+var whiteAH = load("res://Colors/WhiteAliceHighlight.tres")
+var blackAH = load("res://Colors/BlackAliceHighlight.tres")
 
 func update_material():
 	if white:
@@ -62,16 +55,9 @@ func update_material():
 func turn(white):
 	if active:
 		turnsLeft -= 1
-	print(turnsLeft)
-	if turnsLeft <= 0:
-		time_flip()
-		piece.activate()
-	$Tile.change_number(turnsLeft)
-
-func time_flip(turns = 0):
-	piece.show()
-	deactivate()
-	piece.alice = alice
+		if turnsLeft <= 0:
+			time_flip()
+		$Tile.change_number(turnsLeft)
 
 func get_moves(board):
 	return []
