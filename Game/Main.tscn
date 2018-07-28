@@ -14,7 +14,7 @@ script = ExtResource( 1 )
 transform = Transform( 0.92, 0, 0, 0, 0.92, 0, 0, 0, 0.92, 1.14777, -0.502145, 3.86449 )
 _sections_unfolded = [ "Transform" ]
 
-[node name="Position3D" type="Position3D" parent="Board" index="4"]
+[node name="Position3D" type="Position3D" parent="Board" index="3"]
 
 transform = Transform( 1.08696, 0, 0, 0, 1.08696, 0, 0, 0, 1.08696, 0.943023, 0.54581, -2.02027 )
 _sections_unfolded = [ "Transform" ]

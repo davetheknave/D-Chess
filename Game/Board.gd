@@ -220,8 +220,10 @@ func enPassant():
 		if enPassant[1] == 2 and squares[3][enPassant[0]].alice == currentPiece.alice:
 			squares[3][enPassant[0]].queue_free()
 			squares[3][enPassant[0]] = null
+var turnsMove = -1
 
 func try_move(piece, pos, turns):
+	turnsMove = turns
 	var truePos = get_numbers(pos.name)
 	var x = truePos[0]
 	var y = truePos[1]
@@ -250,6 +252,7 @@ func try_move(piece, pos, turns):
 		if turns > 0:
 			time_travel(piece, turns)
 		emit_signal("turn", whiteNext)
+	turnsMove = -1
 
 func time_travel(piece, turns):
 	var tile = piece.time_flip(turns)
