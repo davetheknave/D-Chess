@@ -60,6 +60,8 @@ func _input(event):
 					else:
 						board.try_move(selected, result.collider, $HUD.time)
 						release(selected)
+				else:
+					release(selected)
 		elif event is InputEventMouseMotion:
 			var result = pick(event, false)
 			if not result.empty():
@@ -73,6 +75,8 @@ func _input(event):
 				if not result.empty():
 					$Timer.start()
 					select(result.collider.get_parent())
+					if selected.name == "King":
+						$HUD.reset_time()
 
 func pick(event, pieces):
 	var camera = $Board/Position3D/Camera
