@@ -30,28 +30,34 @@ func reset_time():
 	$HBoxContainer/TimeControls/Move1.pressed = true
 	time = 1
 
-func promote():
+var piece
+
+func promote(piece):
+	self.piece = piece
 	$PromotionPopup.show()
 
 func _on_Queen_pressed():
-	emit_signal("promoted", "q")
+	emit_signal("promoted", piece, "q")
+	piece = null
 	$PromotionPopup.hide()
 
 func _on_Rook_pressed():
-	emit_signal("promoted", "r")
+	emit_signal("promoted", piece, "r")
+	piece = null
 	$PromotionPopup.hide()
 
 func _on_Bishop_pressed():
-	emit_signal("promoted", "b")
+	emit_signal("promoted", piece, "b")
+	piece = null
 	$PromotionPopup.hide()
 
 func _on_Knight_pressed():
-	emit_signal("promoted", "n")
+	emit_signal("promoted", piece, "n")
+	piece = null
 	$PromotionPopup.hide()
 
 func _on_Button_pressed():
 	emit_signal("reset")
-
 
 func _on_TimeControls_change(turns):
 	time = turns

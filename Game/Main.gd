@@ -26,11 +26,11 @@ func change_turn(white):
 
 func promote(promoted):
 	get_tree().paused = true
-	$HUD.promote()
+	$HUD.promote(promoted)
 
-func finish_promotion(promoted):
+func finish_promotion(pawn, promoted):
 	get_tree().paused = false
-	board.finish_promotion(promoted)
+	board.finish_promotion(pawn, promoted)
 
 func _on_HUD_reset():
 	board.reset()

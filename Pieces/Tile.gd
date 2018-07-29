@@ -2,7 +2,6 @@ extends "res://Pieces/Piece.gd"
 
 const time = true
 
-var turnsLeft = 0
 var active
 
 func _ready():

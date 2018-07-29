@@ -17,7 +17,6 @@ const origin = Vector3(-0.99, 0.43, -0.445)
 const START_POSITION = ["rnbqkbnr","pppppppp","11111111","11111111","11111111","11111111","PPPPPPPP","RNBQKBNR"]
 
 var squares  # A representation of the board
-var currentPiece  # A currently selected piece
 var whiteNext  # Is it white's turn?
 var enPassant  # If a piece moves 2 spaces, this keeps track of the en passant position
 var turnCount = 0
@@ -41,7 +40,6 @@ func reset():
 	squares = []
 	whiteNext = true
 	enPassant = [-1,-1]
-	currentPiece = null
 	for i in 8:
 		squares.append([null,null,null,null,null,null,null,null])
 		for j in 8:
@@ -63,8 +61,9 @@ func reset():
 			piece.init(self, white)
 			add_child(piece)
 			piece.alice = false
+			if piece.other != null:
+				connect("turn", piece.other, "turn")
 			piece.update_material()
-			piece.connect("selected", self, "piece_clicked")
 			move(piece, j, i)
 			if "moved" in piece:
 				piece.moved = false
@@ -152,13 +151,6 @@ func swap(old, new):
 	var y = old.position[1]
 	new.global_transform = old.global_transform
 	squares[y][x] = new
-	old.deactivate()
-	if is_connected("turn", old, "turn"):
-		disconnect("turn", old, "turn")
-	if is_connected("turn", new, "turn"):
-		disconnect("turn", new, "turn")
-	new.activate()
-	new.update_material()
 
 func place(piece, x, y):
 	piece.translation = Vector3(origin.x + squareLength * x, origin.y, origin.z - squareLength * y)
@@ -232,9 +224,9 @@ func has_valid_moves(white):
 func promote(piece):
 	emit_signal("promote", piece)
 
-func finish_promotion(newPiece):
-	var x = currentPiece.position[0]
-	var y = currentPiece.position[1]
+func finish_promotion(oldPawn, newPiece):
+	var x = oldPawn.position[0]
+	var y = oldPawn.position[1]
 	var piece
 	match newPiece:
 		'q': piece = queen.instance()
@@ -242,34 +234,28 @@ func finish_promotion(newPiece):
 		'b': piece = bishop.instance()
 		'r': piece = rook.instance()
 	add_child(piece)
-	piece.set_white(currentPiece.white)
+	piece.white = oldPawn.white
+	piece.alice = oldPawn.alice
 	piece.board = self
-	piece.connect("selected", self, "piece_clicked")
+	piece.update_material()
 	move(piece, x, y)
 	squares[y][x] = piece
-	currentPiece.queue_free()
+	oldPawn.delete()
 
-func enPassant():
+func enPassant(piece):
 	if squares[enPassant[1]][enPassant[0]] == null:
-		if enPassant[1] == 5 and squares[4][enPassant[0]].alice == currentPiece.alice:
+		if enPassant[1] == 5 and squares[4][enPassant[0]].alice == piece.alice:
 			squares[4][enPassant[0]].queue_free()
 			squares[4][enPassant[0]] = null
-		if enPassant[1] == 2 and squares[3][enPassant[0]].alice == currentPiece.alice:
+		if enPassant[1] == 2 and squares[3][enPassant[0]].alice == piece.alice:
 			squares[3][enPassant[0]].queue_free()
 			squares[3][enPassant[0]] = null
 var turnsMove = -1
 
 func time_travel(piece, turns):
-#	var tile = piece.time_flip(turns)
-	var tile = piece.other
-	if tile == null:
-		return
-	tile.turnsLeft = turns
-	tile.alice = piece.alice
-	tile.position = piece.position
-	swap(piece, tile)
-	connect("turn", tile, "turn")
-
+	var tile = piece.time_flip(turns)
+	if tile != null:
+		swap(piece, tile)
 
 # Cosmetic
 
@@ -282,11 +268,6 @@ func deselect_all():
 
 
 # Fetching
-
-func piece_clicked(piece):
-	currentPiece = piece
-	emit_signal("select", piece)
-	deselect_all()
 
 func get_piece_at(x, y):
 	if !bounds(x) or !bounds(y):

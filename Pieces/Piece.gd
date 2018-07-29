@@ -12,6 +12,7 @@ var alice = false
 var selected = false
 var board
 var other
+var turnsLeft = -1
 
 func _ready():
 	pass
@@ -105,10 +106,13 @@ func append_move(list, x, y):
 	return false
 
 func time_flip(turns = 0):
+	if other == null:
+		return null
 	other.activate()
 	other.turnsLeft = turns
 	other.alice = alice
 	other.position = position
+	other.update_material()
 	board.swap(self, other)
 	deactivate()
 	return other

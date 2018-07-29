@@ -59,7 +59,7 @@ func move(x, y):
 	if (white and y == 7) or (not white and y == 0):
 		board.promote(self)
 	if board.enPassant[0] == x and board.enPassant[1] == y:
-		board.enPassant()
+		board.enPassant(self)
 	.move(x, y)
 	if oldY - 2 == y:  # Black double move
 		board.enPassant[0] = x
