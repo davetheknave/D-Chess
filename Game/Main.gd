@@ -36,6 +36,7 @@ func _on_HUD_reset():
 	board.reset()
 	$HUD._ready()
 	get_tree().paused = false
+	$AnimationPlayer.play_backwards("Rotate")
 
 func select(piece):
 	if piece.white == board.whiteNext:
