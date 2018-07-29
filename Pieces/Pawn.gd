@@ -21,7 +21,8 @@ func get_moves(board):
 			else:
 				p = board.get_piece_at(m[0], m[1] + 1)
 			if p != null and p.alice == alice:
-				append_move(moveList, m[0], m[1])
+				if !p.time or p.turnsLeft == board.turnsMove:
+					append_move(moveList, m[0], m[1])
 	# Normal move
 	for m in get_forwards(board, x, y):
 		var p = board.get_piece_at(m[0], m[1])

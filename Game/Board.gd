@@ -94,7 +94,7 @@ func move(piece, x, y):
 	if piece.position != null:
 		# Capture any pieces
 		if squares[y][x] != null:
-			squares[y][x].queue_free()
+			squares[y][x].delete()
 			turnCount = 0
 		# Update board array
 		squares[piece.position[1]][piece.position[0]] = null
@@ -110,6 +110,7 @@ func move(piece, x, y):
 	# Update board model
 	place(piece, piece.position[0], piece.position[1])
 
+var turnsMove = -1
 func try_move(piece, pos, turns):
 	turnsMove = turns
 	var truePos = get_numbers(pos.name)
@@ -239,18 +240,28 @@ func finish_promotion(oldPawn, newPiece):
 	piece.board = self
 	piece.update_material()
 	move(piece, x, y)
-	squares[y][x] = piece
 	oldPawn.delete()
+	squares[y][x] = piece
 
 func enPassant(piece):
 	if squares[enPassant[1]][enPassant[0]] == null:
-		if enPassant[1] == 5 and squares[4][enPassant[0]].alice == piece.alice:
-			squares[4][enPassant[0]].queue_free()
-			squares[4][enPassant[0]] = null
-		if enPassant[1] == 2 and squares[3][enPassant[0]].alice == piece.alice:
-			squares[3][enPassant[0]].queue_free()
-			squares[3][enPassant[0]] = null
-var turnsMove = -1
+		var target = get_enPassant()
+		if target == null:
+			return
+		if target.alice == piece.alice:
+			if target.time:
+				if target.turnsLeft != turnsMove:
+					return
+			target.delete()
+
+func get_enPassant():
+	if enPassant != [-1, -1]:
+		if enPassant[1] == 5:
+			return squares[4][enPassant[0]]
+		if enPassant[1] == 2:
+			return squares[3][enPassant[0]]
+	return null
+
 
 func time_travel(piece, turns):
 	var tile = piece.time_flip(turns)

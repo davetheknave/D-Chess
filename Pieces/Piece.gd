@@ -18,6 +18,7 @@ func _ready():
 	pass
 
 func delete():
+	board.squares[position[1]][position[0]] = null
 	if other != null:
 		other.queue_free()
 	queue_free()
