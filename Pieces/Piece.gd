@@ -95,7 +95,7 @@ func append_move(list, x, y):
 	if !board.bounds(x) or !board.bounds(y): return true
 	var piece = board.get_piece_at(x, y)
 	if piece != null:
-		if piece.time and board.turnsMove != piece.turnsLeft:
+		if piece.time and not board.turnsMove == piece.turnsLeft + 1:
 			return false
 		if self.alice != piece.alice:
 			return false

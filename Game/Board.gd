@@ -249,9 +249,6 @@ func enPassant(piece):
 		if target == null:
 			return
 		if target.alice == piece.alice:
-			if target.time:
-				if target.turnsLeft != turnsMove:
-					return
 			target.delete()
 
 func get_enPassant():
