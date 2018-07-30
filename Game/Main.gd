@@ -75,7 +75,7 @@ func _input(event):
 				if not result.empty():
 					$Timer.start()
 					select(result.collider.get_parent())
-					if selected.name == "King":
+					if selected != null and selected.name == "King":
 						$HUD.reset_time()
 
 func pick(event, pieces):
