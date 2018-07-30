@@ -118,6 +118,7 @@ surfaces/0 = {
 "skeleton_aabb": [  ],
 "vertex_count": 6
 }
+_sections_unfolded = [ "surface_1" ]
 
 [sub_resource type="ArrayMesh" id=5]
 
@@ -1232,7 +1233,7 @@ surfaces/0 = {
 }
 _sections_unfolded = [ "surface_1" ]
 
-[node name="Board" type="Spatial"]
+[node name="Board" type="Spatial" index="0"]
 
 script = ExtResource( 1 )
 king = ExtResource( 2 )
@@ -1245,8 +1246,6 @@ knight = ExtResource( 7 )
 [node name="Edges" parent="." index="0" instance=ExtResource( 8 )]
 
 [node name="White" type="Spatial" parent="." index="1"]
-
-editor/display_folded = true
 
 [node name="B1" type="MeshInstance" parent="White" index="0"]
 
@@ -1263,6 +1262,7 @@ lod_max_hysteresis = 0.0
 mesh = SubResource( 1 )
 skeleton = NodePath("..")
 material/0 = null
+_sections_unfolded = [ "material" ]
 
 [node name="D1" type="MeshInstance" parent="White" index="1"]
 

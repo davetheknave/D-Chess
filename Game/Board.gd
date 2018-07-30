@@ -84,6 +84,10 @@ func reset():
 
 func attach_square(square, white):
 	square.create_convex_collision()
+	if white:
+		square.set_surface_material(0, load("res://Colors/WhiteTile.tres"))
+	else:
+		square.set_surface_material(0, load("res://Colors/BlackTile.tres"))
 	var body = square.get_node(square.name+"_col")
 	body.collision_layer = 2
 
