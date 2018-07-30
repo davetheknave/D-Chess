@@ -2,6 +2,7 @@ extends "res://Pieces/Piece.gd"
 
 signal castle(A)
 
+const type = "King"
 var castleA = true
 var castleH = true
 

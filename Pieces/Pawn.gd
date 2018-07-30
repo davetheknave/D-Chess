@@ -1,6 +1,7 @@
 extends "res://Pieces/Piece.gd"
 
 var moved = false
+const type = "Pawn"
 
 func _ready():
 	pass

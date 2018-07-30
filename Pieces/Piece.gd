@@ -5,6 +5,7 @@ export (NodePath) var shape
 export (PackedScene) var flip
 
 const time = false
+const type = "Piece"
 
 var position = null
 var white = true

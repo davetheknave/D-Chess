@@ -108,7 +108,7 @@ func move(piece, x, y):
 		piece.position = [x, y]
 	squares[y][x] = piece
 	# Update turn count
-	if piece.name == "Pawn":
+	if piece.type == "Pawn":
 		turnCount = 0
 	turnCount += 1
 	# Update board model
@@ -130,7 +130,7 @@ func try_move(piece, pos, turns):
 	if not check_move(piece, x, y):
 		moveValid = false
 		print("You cannot move into check!")
-	if piece.name == "King":
+	if piece.type == "King":
 		if piece.position[0] == (x - 2):
 			var checknow = get_check(piece.white)
 			var checkone = !check_move(piece, x - 1, y, false)
@@ -187,7 +187,7 @@ func get_check(white):
 				var moves = piece.get_moves(self)
 				for move in moves:
 					var pieceAtMove = get_piece_at(move[0], move[1])
-					if pieceAtMove != null and pieceAtMove.name == "King":
+					if pieceAtMove != null and pieceAtMove.type == "King":
 						return true
 	return false
 
@@ -202,7 +202,7 @@ func check_move(piece, x, y, alice=true, normal=true):
 	if alice:
 		if get_check(piece.white):
 			result = false
-	if normal and piece.name == "King":
+	if normal and piece.type == "King":
 		piece.alice = !piece.alice
 		if get_check(piece.white):
 			result = false
