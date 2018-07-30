@@ -1,13 +1,11 @@
-[gd_scene load_steps=15 format=2]
+[gd_scene load_steps=14 format=2]
 
 [ext_resource path="res://Tiles/Knight.gd" type="Script" id=1]
-[ext_resource path="res://Tiles/Material_002.material" type="Material" id=2]
-[ext_resource path="res://Tiles/Material_001.material" type="Material" id=3]
-[ext_resource path="res://Tiles/Material.material" type="Material" id=4]
+[ext_resource path="res://Colors/BlackAlice.tres" type="Material" id=2]
+[ext_resource path="res://Colors/WhiteAlice.tres" type="Material" id=3]
 
-[sub_resource type="ArrayMesh" id=1]
+[sub_resource type="ArrayMesh" id=10]
 
-resource_name = "Cube.001"
 blend_shape_mode = 1
 custom_aabb = AABB( 0, 0, 0, 0, 0, 0 )
 surfaces/0 = {
@@ -36,8 +34,9 @@ surfaces/1 = {
 "skeleton_aabb": [  ],
 "vertex_count": 15340
 }
+_sections_unfolded = [ "surface_1", "surface_2" ]
 
-[sub_resource type="ArrayMesh" id=2]
+[sub_resource type="ArrayMesh" id=1]
 
 resource_name = "Cube.008"
 blend_shape_mode = 1
@@ -55,8 +54,9 @@ surfaces/0 = {
 "skeleton_aabb": [  ],
 "vertex_count": 6
 }
+_sections_unfolded = [ "surface_1" ]
 
-[sub_resource type="ArrayMesh" id=3]
+[sub_resource type="ArrayMesh" id=2]
 
 resource_name = "Cube.009"
 blend_shape_mode = 1
@@ -74,8 +74,9 @@ surfaces/0 = {
 "skeleton_aabb": [  ],
 "vertex_count": 6
 }
+_sections_unfolded = [ "surface_1" ]
 
-[sub_resource type="ArrayMesh" id=4]
+[sub_resource type="ArrayMesh" id=3]
 
 resource_name = "Cube.010"
 blend_shape_mode = 1
@@ -93,8 +94,9 @@ surfaces/0 = {
 "skeleton_aabb": [  ],
 "vertex_count": 6
 }
+_sections_unfolded = [ "surface_1" ]
 
-[sub_resource type="ArrayMesh" id=5]
+[sub_resource type="ArrayMesh" id=4]
 
 resource_name = "Cube.007"
 blend_shape_mode = 1
@@ -112,8 +114,9 @@ surfaces/0 = {
 "skeleton_aabb": [  ],
 "vertex_count": 4
 }
+_sections_unfolded = [ "surface_1" ]
 
-[sub_resource type="ArrayMesh" id=6]
+[sub_resource type="ArrayMesh" id=5]
 
 resource_name = "Cube.006"
 blend_shape_mode = 1
@@ -131,8 +134,9 @@ surfaces/0 = {
 "skeleton_aabb": [  ],
 "vertex_count": 6
 }
+_sections_unfolded = [ "surface_1" ]
 
-[sub_resource type="ArrayMesh" id=7]
+[sub_resource type="ArrayMesh" id=6]
 
 resource_name = "Cube.005"
 blend_shape_mode = 1
@@ -150,8 +154,9 @@ surfaces/0 = {
 "skeleton_aabb": [  ],
 "vertex_count": 4
 }
+_sections_unfolded = [ "surface_1" ]
 
-[sub_resource type="ArrayMesh" id=8]
+[sub_resource type="ArrayMesh" id=7]
 
 resource_name = "Cube.003"
 blend_shape_mode = 1
@@ -169,8 +174,9 @@ surfaces/0 = {
 "skeleton_aabb": [  ],
 "vertex_count": 4
 }
+_sections_unfolded = [ "surface_1" ]
 
-[sub_resource type="ArrayMesh" id=9]
+[sub_resource type="ArrayMesh" id=8]
 
 resource_name = "Cube.002"
 blend_shape_mode = 1
@@ -188,8 +194,9 @@ surfaces/0 = {
 "skeleton_aabb": [  ],
 "vertex_count": 4
 }
+_sections_unfolded = [ "surface_1" ]
 
-[sub_resource type="ArrayMesh" id=10]
+[sub_resource type="ArrayMesh" id=9]
 
 resource_name = "Cube"
 blend_shape_mode = 1
@@ -201,14 +208,15 @@ surfaces/0 = {
 "blend_shape_data": [  ],
 "format": 98059,
 "index_count": 2118,
-"material": ExtResource( 4 ),
+"material": ExtResource( 2 ),
 "name": "Material",
 "primitive": 4,
 "skeleton_aabb": [  ],
 "vertex_count": 2077
 }
+_sections_unfolded = [ "surface_1" ]
 
-[node name="Scene Root" type="Spatial" index="0"]
+[node name="Scene Root" type="Spatial"]
 
 script = ExtResource( 1 )
 
@@ -224,7 +232,7 @@ lod_min_distance = 0.0
 lod_min_hysteresis = 0.0
 lod_max_distance = 0.0
 lod_max_hysteresis = 0.0
-mesh = SubResource( 1 )
+mesh = SubResource( 10 )
 skeleton = NodePath("..")
 material/0 = null
 material/1 = null
@@ -241,7 +249,7 @@ lod_min_distance = 0.0
 lod_min_hysteresis = 0.0
 lod_max_distance = 0.0
 lod_max_hysteresis = 0.0
-mesh = SubResource( 2 )
+mesh = SubResource( 1 )
 skeleton = NodePath("..")
 material/0 = null
 
@@ -257,7 +265,7 @@ lod_min_distance = 0.0
 lod_min_hysteresis = 0.0
 lod_max_distance = 0.0
 lod_max_hysteresis = 0.0
-mesh = SubResource( 3 )
+mesh = SubResource( 2 )
 skeleton = NodePath("..")
 material/0 = null
 
@@ -273,7 +281,7 @@ lod_min_distance = 0.0
 lod_min_hysteresis = 0.0
 lod_max_distance = 0.0
 lod_max_hysteresis = 0.0
-mesh = SubResource( 4 )
+mesh = SubResource( 3 )
 skeleton = NodePath("..")
 material/0 = null
 
@@ -289,7 +297,7 @@ lod_min_distance = 0.0
 lod_min_hysteresis = 0.0
 lod_max_distance = 0.0
 lod_max_hysteresis = 0.0
-mesh = SubResource( 5 )
+mesh = SubResource( 4 )
 skeleton = NodePath("..")
 material/0 = null
 
@@ -305,7 +313,7 @@ lod_min_distance = 0.0
 lod_min_hysteresis = 0.0
 lod_max_distance = 0.0
 lod_max_hysteresis = 0.0
-mesh = SubResource( 6 )
+mesh = SubResource( 5 )
 skeleton = NodePath("..")
 material/0 = null
 
@@ -321,7 +329,7 @@ lod_min_distance = 0.0
 lod_min_hysteresis = 0.0
 lod_max_distance = 0.0
 lod_max_hysteresis = 0.0
-mesh = SubResource( 7 )
+mesh = SubResource( 6 )
 skeleton = NodePath("..")
 material/0 = null
 
@@ -339,13 +347,14 @@ lod_min_distance = 0.0
 lod_min_hysteresis = 0.0
 lod_max_distance = 0.0
 lod_max_hysteresis = 0.0
-mesh = SubResource( 8 )
+mesh = SubResource( 7 )
 skeleton = NodePath("..")
 material/0 = null
 
 [node name="Covers_001" type="MeshInstance" parent="." index="9"]
 
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -0.0106291, 0.0446438, 0.371035 )
+visible = false
 layers = 1
 material_override = null
 cast_shadow = 1
@@ -355,7 +364,7 @@ lod_min_distance = 0.0
 lod_min_hysteresis = 0.0
 lod_max_distance = 0.0
 lod_max_hysteresis = 0.0
-mesh = SubResource( 9 )
+mesh = SubResource( 8 )
 skeleton = NodePath("..")
 material/0 = null
 
@@ -371,7 +380,7 @@ lod_min_distance = 0.0
 lod_min_hysteresis = 0.0
 lod_max_distance = 0.0
 lod_max_hysteresis = 0.0
-mesh = SubResource( 10 )
+mesh = SubResource( 9 )
 skeleton = NodePath("..")
 material/0 = null
 

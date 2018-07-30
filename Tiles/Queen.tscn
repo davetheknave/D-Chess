@@ -1,9 +1,8 @@
-[gd_scene load_steps=16 format=2]
+[gd_scene load_steps=15 format=2]
 
 [ext_resource path="res://Tiles/TileModel.gd" type="Script" id=1]
-[ext_resource path="res://Tiles/Material_002.material" type="Material" id=2]
-[ext_resource path="res://Tiles/Material_001.material" type="Material" id=3]
-[ext_resource path="res://Tiles/Material.material" type="Material" id=4]
+[ext_resource path="res://Colors/WhiteAlice.tres" type="Material" id=2]
+[ext_resource path="res://Colors/BlackAlice.tres" type="Material" id=3]
 
 [sub_resource type="ArrayMesh" id=1]
 
@@ -36,6 +35,7 @@ surfaces/1 = {
 "skeleton_aabb": [  ],
 "vertex_count": 17254
 }
+_sections_unfolded = [ "surface_1", "surface_2" ]
 
 [sub_resource type="ArrayMesh" id=2]
 
@@ -55,6 +55,7 @@ surfaces/0 = {
 "skeleton_aabb": [  ],
 "vertex_count": 6
 }
+_sections_unfolded = [ "surface_1" ]
 
 [sub_resource type="ArrayMesh" id=3]
 
@@ -74,6 +75,7 @@ surfaces/0 = {
 "skeleton_aabb": [  ],
 "vertex_count": 6
 }
+_sections_unfolded = [ "surface_1" ]
 
 [sub_resource type="ArrayMesh" id=4]
 
@@ -93,6 +95,7 @@ surfaces/0 = {
 "skeleton_aabb": [  ],
 "vertex_count": 6
 }
+_sections_unfolded = [ "surface_1" ]
 
 [sub_resource type="ArrayMesh" id=5]
 
@@ -112,6 +115,7 @@ surfaces/0 = {
 "skeleton_aabb": [  ],
 "vertex_count": 4
 }
+_sections_unfolded = [ "surface_1" ]
 
 [sub_resource type="ArrayMesh" id=6]
 
@@ -131,6 +135,7 @@ surfaces/0 = {
 "skeleton_aabb": [  ],
 "vertex_count": 6
 }
+_sections_unfolded = [ "surface_1" ]
 
 [sub_resource type="ArrayMesh" id=7]
 
@@ -150,6 +155,7 @@ surfaces/0 = {
 "skeleton_aabb": [  ],
 "vertex_count": 4
 }
+_sections_unfolded = [ "surface_1" ]
 
 [sub_resource type="ArrayMesh" id=8]
 
@@ -169,6 +175,7 @@ surfaces/0 = {
 "skeleton_aabb": [  ],
 "vertex_count": 6
 }
+_sections_unfolded = [ "surface_1" ]
 
 [sub_resource type="ArrayMesh" id=9]
 
@@ -188,6 +195,7 @@ surfaces/0 = {
 "skeleton_aabb": [  ],
 "vertex_count": 4
 }
+_sections_unfolded = [ "surface_1" ]
 
 [sub_resource type="ArrayMesh" id=10]
 
@@ -207,6 +215,7 @@ surfaces/0 = {
 "skeleton_aabb": [  ],
 "vertex_count": 4
 }
+_sections_unfolded = [ "surface_1" ]
 
 [sub_resource type="ArrayMesh" id=11]
 
@@ -220,12 +229,13 @@ surfaces/0 = {
 "blend_shape_data": [  ],
 "format": 98059,
 "index_count": 5349,
-"material": ExtResource( 4 ),
+"material": ExtResource( 2 ),
 "name": "Material",
 "primitive": 4,
 "skeleton_aabb": [  ],
 "vertex_count": 5270
 }
+_sections_unfolded = [ "surface_1" ]
 
 [node name="Scene Root" type="Spatial"]
 
@@ -283,6 +293,7 @@ material/0 = null
 [node name="Covers_007" type="MeshInstance" parent="." index="3"]
 
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0.0215939, 0.0393594, 0.50173 )
+visible = false
 layers = 1
 material_override = null
 cast_shadow = 1
@@ -299,6 +310,7 @@ material/0 = null
 [node name="Covers_006" type="MeshInstance" parent="." index="4"]
 
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0.0215939, 0.0393594, 0.50173 )
+visible = false
 layers = 1
 material_override = null
 cast_shadow = 1
@@ -315,6 +327,7 @@ material/0 = null
 [node name="Covers_005" type="MeshInstance" parent="." index="5"]
 
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0.0215939, 0.0393594, 0.50173 )
+visible = false
 layers = 1
 material_override = null
 cast_shadow = 1
@@ -359,6 +372,7 @@ lod_max_hysteresis = 0.0
 mesh = SubResource( 8 )
 skeleton = NodePath("..")
 material/0 = null
+_sections_unfolded = [ "material" ]
 
 [node name="Covers_002" type="MeshInstance" parent="." index="8"]
 
@@ -375,6 +389,7 @@ lod_max_hysteresis = 0.0
 mesh = SubResource( 9 )
 skeleton = NodePath("..")
 material/0 = null
+_sections_unfolded = [ "material" ]
 
 [node name="Covers_001" type="MeshInstance" parent="." index="9"]
 
