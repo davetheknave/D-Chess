@@ -34,7 +34,7 @@ func get_moves(board):
 		append_move(moveList, x + 2, y)
 	return moveList
 
-func time_flip(turns):
+func time_flip(turns = 0):
 	return null
 
 func move(x, y):

@@ -15,7 +15,7 @@ func deactivate():
 	.deactivate()
 	active = false
 
-func set_material():
+func set_material(material):
 	pass
 
 var blackN = load("res://Colors/Black.tres")
@@ -51,7 +51,7 @@ func update_material():
 			else:
 				shape.color(blackN, whiteN)
 
-func turn(white):
+func turn():
 	if active:
 		turnsLeft -= 1
 		if turnsLeft <= 0:
