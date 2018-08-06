@@ -29,3 +29,7 @@ Kings may not time travel. Pawns cannot time travel and be promoted on the same 
 Two pieces cannot occupy the same space on the board, even if they are in different dimensions or times.
 
 En passant is possible only if the two pawns involved are in the same dimension. En passant cannot be used to capture two pieces in one turn.
+
+## Troubleshooting
+
+Computers with Intel integrated graphics cards are known to have framerate issues. This is due to a problem in the game engine. The version in the 3.1-Dev branch uses a newer, experimental version of the engine which has fixed this issue, but has minor cosmetic issues. Only Linux builds are available for this version, and I am unable to make Windows or Mac builds at this time.
