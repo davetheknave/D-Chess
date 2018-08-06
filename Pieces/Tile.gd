@@ -51,7 +51,7 @@ func update_material():
 			else:
 				shape.color(blackN, whiteN)
 
-func turn():
+func turn(white):
 	if active:
 		turnsLeft -= 1
 		if turnsLeft <= 0:

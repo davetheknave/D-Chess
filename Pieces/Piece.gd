@@ -119,7 +119,7 @@ func time_flip(turns = 0):
 	deactivate()
 	return other
 	
-func turn():
+func turn(white):
 	pass
 
 func move(x, y):

@@ -11,20 +11,16 @@
 extents = Vector3( 0.11299, 0.487898, 0.100443 )
 
 [node name="Queen" instance=ExtResource( 1 )]
-
 script = ExtResource( 2 )
 shape = NodePath("bQueen")
 flip = ExtResource( 3 )
 
 [node name="CollisionShape" parent="Area" index="0"]
-
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0.19776, 0.455817, 0.21836 )
 shape = SubResource( 1 )
 
 [node name="bQueen" parent="." index="1" instance=ExtResource( 4 )]
-
 transform = Transform( 0.1, 0, 0, 0, 0.1, 0, 0, 0, 0.1, -7.79446, -0.436171, 0.451699 )
 material/0 = ExtResource( 5 )
 _sections_unfolded = [ "material" ]
-
 

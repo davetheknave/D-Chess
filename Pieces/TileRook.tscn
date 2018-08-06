@@ -18,13 +18,10 @@ _bundled = {
 }
 
 [node name="Piece" instance=ExtResource( 1 )]
-
 shape = NodePath("Tile")
 flip = SubResource( 1 )
 
 [node name="Tile" parent="." index="1" instance=ExtResource( 2 )]
-
 transform = Transform( 0.2, 0, 0, 0, 0.2, 0, 0, 0, 0.2, 0.0487307, -0.0774135, -0.0186323 )
 _sections_unfolded = [ "Transform" ]
-
 
